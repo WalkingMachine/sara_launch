@@ -1,0 +1,5 @@
+<launch>
+<node name="sara_comm" pkg="wm_robocup2016" type="stage1_speech_recognition.py" />
+  <include file="$(find wm_tts)/launch/wm_tts.launch"/>
+  <include file="$(find sara_vocab)/launch/sara_question.launch"/>
+</launch>
