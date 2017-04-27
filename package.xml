@@ -42,7 +42,6 @@
   <buildtool_depend>catkin</buildtool_depend>
   <run_depend>rgbd_launch</run_depend>
   <run_depend>openni2_launch</run_depend>
-  <run_depend>urg_node</run_depend>
   <run_depend>gmapping</run_depend>
   <run_depend>rtabmap_ros</run_depend>
   <run_depend>rtabmap</run_depend>
