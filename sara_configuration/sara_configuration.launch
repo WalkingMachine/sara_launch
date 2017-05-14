@@ -11,7 +11,7 @@
      <include file="$(find sara_description)/launch/sara_description.launch" />
 
      <!-- motor drivers -->
-     <include file="$(find sara_launch)/roboteq_driver/wm_roboteq_driver.launch" />
+     <include file="$(find roboteq_driver)/launch/sara_drive.launch" />
 
      <!-- neck Dynamixel -->
      <include file="$(find wm_dynamixel_controller)/launch/neckHead_controller_spawner.launch" />
