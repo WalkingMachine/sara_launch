@@ -1,0 +1,10 @@
+<?xml version="1.0" ?>
+<launch>
+    <!-- Gmapping -->
+    <include file="$(find sara_launch)/gmapping/wm_slam_gmapping.launch">
+    
+
+    <!-- Move Base -->
+    <include file="$(find sara_navigation)/launch/move_base.launch">
+
+</launch>
