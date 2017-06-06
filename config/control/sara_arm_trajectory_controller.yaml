@@ -1,0 +1,20 @@
+sara_arm_trajectory_controller:
+  type: "velocity_controllers/JointTrajectoryController"
+  publish_rate: 50               # default: 50
+  joints:
+    - right_shoulder_roll_joint
+    - right_shoulder_pitch_joint
+    - right_shoulder_yaw_joint
+    - right_elbow_pitch_joint
+    - right_elbow_yaw_joint
+    - right_wrist_pitch_joint
+    - right_wrist_roll_joint
+
+  gains: # Required because we're controlling a velocity interface
+    right_shoulder_roll_joint:    {p: 100,  d: 1, i: 1, i_clamp: 1}
+    right_shoulder_pitch_joint:   {p: 100,  d: 1, i: 1, i_clamp: 1}
+    right_shoulder_yaw_joint:     {p: 100,  d: 1, i: 1, i_clamp: 1}
+    right_elbow_pitch_joint:      {p: 100,  d: 1, i: 1, i_clamp: 1}
+    right_elbow_yaw_joint:        {p: 100,  d: 1, i: 1, i_clamp: 1}
+    right_wrist_pitch_joint:      {p: 100,  d: 1, i: 1, i_clamp: 1}
+    right_wrist_roll_joint:        {p: 100,  d: 1, i: 1, i_clamp: 1}

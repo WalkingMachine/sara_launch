@@ -1,0 +1,3 @@
+sara_gripper_action_controller:
+  type: "position_controllers/GripperActionController"
+  joint: right_robotiq_85_left_knuckle_joint

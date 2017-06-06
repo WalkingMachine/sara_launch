@@ -1,0 +1,12 @@
+sara_head_pitch_controller:
+  type: position_controllers/JointPositionController
+  joint: head_pitch_joint
+  pid:
+    p: 100.0
+    d: 10.0
+sara_head_yaw_controller:
+  type: position_controllers/JointPositionController
+  joint: head_yaw_joint
+  pid:
+    p: 100.0
+    d: 10.0
