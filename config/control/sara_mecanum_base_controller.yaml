@@ -2,10 +2,7 @@ sara_base_mecanum_controller:
   type: "wm_mecanum_base_controller/WMMecanumBaseController"
   publish_rate: 50               # default: 50
   joints:
-    - right_shoulder_roll_joint
-    - right_shoulder_pitch_joint
-    - right_shoulder_yaw_joint
-    - right_elbow_pitch_joint
-    - right_elbow_yaw_joint
-    - right_wrist_pitch_joint
-    - right_wrist_roll_joint
+    - front_left_mecanum_wheel_joint
+    - front_right_mecanum_wheel_joint
+    - rear_left_mecanum_wheel_joint
+    - rear_left_mecanum_wheel_joint
