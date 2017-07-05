@@ -7,7 +7,7 @@
   <rosparam command="load" file="$(find sara_launch)/config/control/sara_head_angle_controller.yaml"/>
   <rosparam command="load" file="$(find sara_launch)/config/control/sara_mecanum_base_controller.yaml"/>
   <rosparam command="load" file="$(find sara_launch)/config/control/sara_gripper_action_controller.yaml"/>
-  <!--<rosparam command="load" file="$(find robotiq_85_gazebo)/controller/gripper_controller_robotiq.yaml"/>-->
+  <rosparam command="load" file="$(find robotiq_85_gazebo)/controller/gripper_controller_robotiq.yaml"/>
 
   <!--    load the controllers    -->
   <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false"
@@ -15,6 +15,7 @@
  	                      sara_arm_trajectory_controller
  	                      sara_gripper_action_controller
  	                      sara_head_pitch_controller
- 	                      sara_head_yaw_controller --shutdown-timeout 3"/>
+ 	                      sara_head_yaw_controller
+ 	                      sara_mecanum_base_controller --shutdown-timeout 3"/>
 
 </launch>
