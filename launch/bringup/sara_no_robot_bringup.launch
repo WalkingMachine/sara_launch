@@ -4,4 +4,5 @@
     <include file="$(find sara_launch)/launch/control/sara_controllers.launch"/>
     <include file="$(find sara_moveit)/launch/move_group.launch"/>
     <include file="$(find sara_moveit)/launch/moveit_rviz.launch"/>
+    <include file="$(find sara_moveit)/launch/move_arm_server.launch"/>
 </launch>
