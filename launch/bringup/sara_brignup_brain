@@ -1,0 +1,6 @@
+<launch>
+    <include file="$(find wm_tts)/launch/wm_tts_EN.launch"/>
+    <include file="$(find flexbe_onboard)/launch/behavior_onboard.launch"/>
+    <include file="$(find grasp_selection)/launch/select_grasps.launch"/>
+
+</launch>
