@@ -1,0 +1,7 @@
+<launch>
+    <include file="$(find sara_description)/launch/sara_description.launch"/>
+    <include file="$(find sara_control)/launch/hardware_without_robot.launch"/>
+    <include file="$(find sara_launch)/launch/control/sara_controllers.launch"/>
+    <include file="$(find sara_moveit)/launch/move_group.launch"/>
+    <include file="$(find sara_moveit)/launch/moveit_rviz.launch"/>
+</launch>

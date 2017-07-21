@@ -2,5 +2,5 @@
     <include file="$(find sara_description)/launch/sara_description.launch"/>
     <include file="$(find sara_control)/launch/sara_hardware.launch"/>
     <include file="$(find sara_launch)/launch/control/sara_controllers.launch"/>
-    <include file="$(find sara_teleop)/launch/sara_teleop.launch"/>
+    <include file="$(find sara_moveit)/launch/move_group.launch"/>
 </launch>
