@@ -1,0 +1,95 @@
+<launch>
+    <arg name="upper_body" default="true"/>
+    <arg name="pcl_detector" default="false"/> <!-- do not use at the same time with upper-body detector! -->
+    <arg name="hog" default="false"/>
+
+    <arg name="ground_plane" value="/spencer/sensors/rgbd_front_top/ground_plane"/>
+
+    <arg name="detection_id_increment" default="20"/>
+
+    <arg name="rear"  default="true"/>
+    <arg name="detector_model" default="$(find srl_laser_detectors)/models/lms500_0.25deg_height70cm_rathausgasse.random_forest"/>
+    <arg name="detector_type" default="random_forest"/>
+
+    <arg name="laser_max_distance" default="15"/>
+
+    <arg name="low_confidence_detections" default="true"/>
+
+    <group ns="/spencer/perception_internal/people_detection">
+
+        <!-- RWTH tf based groundplane -->
+        <node pkg="rwth_ground_plane" type="ground_plane_tf_based_fixed" name="ground_plane_front_top" output="screen">
+            <param name="base_footprint" value="base_footprint" type="string"/>
+            <param name="camera_frame" value="rgbd_front_top_depth_optical_frame" type="string"/>
+            <param name="ground_plane" value="$(arg ground_plane)" type="string"/>
+            <param name="rate" value="30.0"/>
+        </node>
+
+        <!-- Front RGB-D upper body -->
+        <include file="$(find rwth_upper_body_detector)/launch/upper_body_detector.launch" ns="rgbd_front_top" if="$(arg upper_body)">
+            <arg name="detected_persons" value="/spencer/perception_internal/detected_persons/rgbd_front_top/upper_body"/>
+            <arg name="camera_namespace" value="/spencer/sensors/rgbd_front_top"/>
+            <arg name="upper_body_detections" value="upper_body_detector/detections" />
+            <arg name="upper_body_bb_centres" value="upper_body_detector/bounding_box_centres" />
+            <arg name="upper_body_image" value="image" />
+            <arg name="ground_plane" value="$(arg ground_plane)" />
+            <arg name="detection_id_offset" value="3"/>
+            <arg name="detection_id_increment" value="$(arg detection_id_increment)"/>
+        </include>
+
+        <!-- Front PCL detector (publishes on same topic as upper-body detector) -->
+        <group if="$(arg pcl_detector)">
+            <remap from="/spencer/perception/detected_persons" to="/spencer/perception_internal/detected_persons/rgbd_front_top/upper_body"/> <!-- replaces upper-body detections -->
+            <include file="$(find pcl_people_detector)/launch/start.launch" ns="rgbd_front_top">
+                <arg name="input_topic" value="/spencer/sensors/rgbd_front_top/depth_registered/points"/>
+                <arg name="camera_info_topic" value="/spencer/sensors/rgbd_front_top/rgb/camera_info"/>
+                <arg name="base_link_frame" value="base_footprint"/>
+                <arg name="detection_frame" value="pcl_people_detector_front_link"/>
+                <arg name="ground_coeffs" value="0 0 -1 0"/>
+                <arg name="detection_id_offset" value="11"/>
+                <arg name="detection_id_increment" value="$(arg detection_id_increment"/>
+            </include>
+        </group>
+
+        <!-- Front RGB-D HOG -->
+        <include file="$(find rwth_ground_hog)/launch/ground_hog_with_GP.launch" ns="rgbd_front_top" if="$(arg hog)">
+            <arg name="world_scale" value="0.001"/>
+            <arg name="score_thresh" value="0.3"/>
+            <arg name="detected_persons" value="/spencer/perception_internal/detected_persons/rgbd_front_top/hog"/>
+            <arg name="camera_namespace" value="/spencer/sensors/rgbd_front_top"/>
+            <arg name="detections" value="hog/detections" />
+            <arg name="result_image" value="hog/image" />
+            <arg name="ground_plane" value="$(arg ground_plane)" />
+            <arg name="detection_id_offset" value="4"/>
+            <arg name="detection_id_increment" value="$(arg detection_id_increment)"/>
+        </include>
+
+        <!-- Front laser detector (Adaboost) -->
+        <include file="$(find srl_laser_detectors)/launch/learned_detector_with_segmentation.launch" ns="laser_front">
+            <arg name="model" value="$(arg detector_model)"/>
+            <arg name="type" value="$(arg detector_type)"/>
+            <arg name="detected_persons" value="/spencer/perception_internal/detected_persons/laser_front"/>
+            <arg name="laser" value="/spencer/sensors/laser_front/echo0"/>
+            <arg name="max_avg_distance_from_sensor" value="$(arg laser_max_distance)"/>
+            <arg name="detection_id_offset" value="1"/>
+            <arg name="detection_id_increment" value="$(arg detection_id_increment)"/>
+            <arg name="pose_variance" value="0.1"/> <!-- affects gain of Kalman filter! may be overriden in nnt.launch! -->
+        </include>
+
+        <!-- Front laser detector (Blob detector with high recall, but low precision) -->
+        <!-- TODO: Use same segmentation as for high-precision detector -->
+        <include file="$(find srl_laser_detectors)/launch/blob_detector.launch" ns="laser_front_high_recall" if="$(arg low_confidence_detections)">
+            <arg name="detected_persons" value="/spencer/perception_internal/detected_persons/laser_front_high_recall"/>
+            <arg name="laser" value="/spencer/sensors/laser_front/echo0"/>
+            <arg name="min_avg_distance_from_sensor" value="0.0"/>
+            <arg name="max_avg_distance_from_sensor" value="$(arg laser_max_distance)"/>
+            <arg name="min_points_per_segment" value="3"/>
+            <arg name="max_points_per_segment" value="999"/>
+            <arg name="detection_id_offset" value="9"/>
+            <arg name="detection_id_increment" value="$(arg detection_id_increment)"/>
+            <arg name="pose_variance" value="0.01"/>
+        </include>
+
+    </group>
+
+</launch>
