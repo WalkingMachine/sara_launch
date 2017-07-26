@@ -4,4 +4,6 @@
     <include file="$(find sara_launch)/launch/control/sara_controllers.launch"/>
     <include file="$(find sara_moveit)/launch/move_group.launch"/>
     <include file="$(find wm_moveit_server)/launch/moveit_server.launch"/>
+    <include file="$(find roboteq_driver)/launch/driveUltime.launch"/>
+    <include file="$(find wm_mecanum_command)/launch/wm_mecanum_auto.launch" />
 </launch>
