@@ -1,6 +1,7 @@
 <?xml version='1.0'?>
 
 <launch>
+
   <!-- load the controllers configuration -->
   <rosparam command="load" file="$(find sara_launch)/config/control/sara_joint_state_controller.yaml"/>
   <rosparam command="load" file="$(find sara_launch)/config/control/sara_arm_trajectory_controller.yaml"/>
@@ -8,12 +9,12 @@
   <rosparam command="load" file="$(find sara_launch)/config/control/sara_head_angle_controller.yaml"/>
   <rosparam command="load" file="$(find sara_launch)/config/control/sara_mecanum_base_controller.yaml"/>
   <rosparam command="load" file="$(find sara_launch)/config/control/sara_gripper_action_controller.yaml"/>
-  <!--<rosparam command="load" file="$(find robotiq_85_gazebo)/controller/gripper_controller_robotiq.yaml"/>-->
+  <rosparam command="load" file="$(find robotiq_85_gazebo)/controller/gripper_controller_robotiq.yaml"/>
 
   <!--    load the controllers    -->
-  <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false"
+  <node name="controller_spawner" pkg="controller_manager"
+        type="spawner" respawn="false"
  	output="screen" args="sara_joint_state_controller
- 	                      sara_arm_trajectory_controller
- 	                      sara_gripper_action_controller --shutdown-timeout 3"/>
+ 	                       --shutdown-timeout 3"/>
 
 </launch>
