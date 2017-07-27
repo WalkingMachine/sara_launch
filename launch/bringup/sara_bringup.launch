@@ -4,5 +4,6 @@
     <include file="$(find sara_launch)/launch/control/sara_controllers.launch"/>
     <include file="$(find wm_mecanum_cmd)/launch/wm_mecanum_auto.launch"/>
     <include file="$(find wm_odometry_feedback)/launch/wm_odometry_feedback.launch"/>
-    <include file="$(find wm_supervisor)/launch/wm_supervisor.launch"/>
+    <include file="$(find sara_moveit)/launch/move_group.launch"/>
+    <include file="$(find wm_moveit_server)/launch/moveit_server.launch"/>
 </launch>
