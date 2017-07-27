@@ -1,4 +1,8 @@
 <launch>
+    <arg name="base_xtion" default="base_xtion" />
+    <arg name="head_xtion" default="head_xtion" />
+    <arg name="arm_xtion" default="arm_xtion" />
+
     <include file="$(find sara_description)/launch/sara_description.launch"/>
     <include file="$(find sara_control)/launch/sara_hardware.launch"/>
     <include file="$(find sara_launch)/launch/control/sara_controllers.launch"/>
@@ -8,4 +12,16 @@
     <include file="$(find wm_moveit_server)/launch/moveit_server.launch"/>
     <include file="$(find sara_launch)/launch/urg_node/wm_urg_node.launch"/>
     <include file="$(find sara_navigation)/launch/move_base_amcl.launch"/>
+
+    <include file="$(find sara_launch)/openni2/wm_openni2.launch" />    
+	<arg name="camera" value="$(arg base_xtion)" />
+    </include>
+    <!--
+    <include file="$(find sara_launch)/openni2/wm_openni2.launch" />    
+	<arg name="camera" value="$(arg base_xtion)" />
+    </include>
+    <include file="$(find sara_launch)/openni2/wm_openni2.launch" />    
+	<arg name="camera" value="$(arg arm_xtion)" />
+    </include>
+    -->
 </launch>
