@@ -5,7 +5,7 @@
   <arg name="device" default=""/>
   <arg name="channels" default="1"/>
   <arg name="sample_rate" default="16000"/>
-  <arg name="ns" default="audio"/>
+  <arg name="ns" default="microphone"/>
 
   <group ns="$(arg ns)">
   <node name="audio_capture" pkg="audio_capture" type="audio_capture" output="screen">
