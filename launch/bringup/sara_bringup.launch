@@ -13,14 +13,14 @@
     <include file="$(find sara_launch)/launch/urg_node/wm_urg_node.launch"/>
     <include file="$(find sara_navigation)/launch/move_base_amcl.launch"/>
 
-    <include file="$(find sara_launch)/openni2/wm_openni2.launch" />    
+    <include file="$(find sara_launch)/openni2/wm_openni2.launch" >    
 	<arg name="camera" value="$(arg base_xtion)" />
     </include>
     <!--
-    <include file="$(find sara_launch)/openni2/wm_openni2.launch" />    
+    <include file="$(find sara_launch)/openni2/wm_openni2.launch" >    
 	<arg name="camera" value="$(arg base_xtion)" />
     </include>
-    <include file="$(find sara_launch)/openni2/wm_openni2.launch" />    
+    <include file="$(find sara_launch)/openni2/wm_openni2.launch" >    
 	<arg name="camera" value="$(arg arm_xtion)" />
     </include>
     -->
