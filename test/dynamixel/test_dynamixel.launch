@@ -1,0 +1,15 @@
+<launch>
+
+    <!-- start robot description -->
+        <include file="$(find sara_description)/launch/sara_description.launch"/>
+
+    <!-- start the nodes   -->
+        <include file="$(find wm_dynamixel_node)/launch/wm_dynamixel_node.launch"/>
+
+    <!-- start hardware -->
+        <include file="$(find sara_launch)/test/dynamixel/dynamixel_hardware.launch"/>
+
+    <!-- start controller -->
+        <include file="$(find sara_launch)/test/dynamixel/dynamixel_controller.launch"/>
+
+</launch>
