@@ -1,0 +1,13 @@
+<launch>
+
+    <!-- start robot description -->
+        <include file="$(find sara_description)/launch/sara_description.launch"/>
+
+    <!-- start ros control related nodes -->
+        <include file="$(find sara_control)/launch/sara_hardware.launch"/>
+        <include file="$(find sara_launch)/launch/control/sara_controllers.launch"/>
+
+    <!--    start the hardwares nodes   -->
+        <include file="$(find wm_dynamixel_node)/launch/wm_dynamixel_node.launch"/>
+
+</launch>
