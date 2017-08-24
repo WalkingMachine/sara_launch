@@ -1,16 +1,9 @@
 dynamixel_test_controller:
-  type: "velocity_controllers/JointTrajectoryController"
-  #type: "velocity_controllers/JointGroupVelocityController"
+  #type: "velocity_controllers/JointTrajectoryController"
+  type: "velocity_controllers/JointGroupVelocityController"
   publish_rate: 100               # default: 50
   joints:
     - right_wrist_pitch_joint
     - right_wrist_roll_joint
     - head_pitch_joint
 #    - head_yaw_joint
-
-
-  gains: # Required because we're controlling a velocity interface
-    right_wrist_pitch_joint:      {p: 0.1,  d: 0.01, i: 0.001, i_clamp: 1}
-    right_wrist_roll_joint:        {p: 0.1,  d: 0.01, i: 0.001, i_clamp: 1}
-    head_pitch_joint:        {p: 0.1,  d: 0.01, i: 0.001, i_clamp: 1}
-    head_yaw_joint:        {p: 0.1,  d: 0.01, i: 0.001, i_clamp: 1}

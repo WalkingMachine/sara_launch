@@ -13,6 +13,7 @@ sara_right_wrist_pitch_joint:
   offset: 3.14159
   direction: 1
   simulation: false
+  resolution: 4096
 
 sara_right_wrist_roll_joint:
   type: wm_dynamixel_hardware_interface/WMDynamixelHardwareInterface
@@ -22,6 +23,7 @@ sara_right_wrist_roll_joint:
   offset: -3.14159
   direction: -1
   simulation: false
+  resolution: 4096
 
 sara_head_pitch_dynamixel:
   type: wm_dynamixel_hardware_interface/WMDynamixelHardwareInterface
@@ -31,6 +33,7 @@ sara_head_pitch_dynamixel:
   offset: 3.14159
   direction: 1
   simulation: false
+  resolution: 1024
 
 
 sara_head_yaw_dynamixel: # TODO
