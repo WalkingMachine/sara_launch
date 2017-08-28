@@ -1,0 +1,44 @@
+robot_hardware:
+  - sara_right_wrist_pitch_joint
+  - sara_right_wrist_roll_joint
+  - sara_head_pitch_dynamixel
+#  - sara_head_yaw_dynamixel
+
+
+sara_right_wrist_pitch_joint:
+  type: wm_dynamixel_hardware_interface/WMDynamixelHardwareInterface
+  joints:
+    - right_wrist_pitch_joint
+  id: 2
+  offset: 3.14159
+  direction: 1
+  simulation: false
+  resolution: 4096
+
+sara_right_wrist_roll_joint:
+  type: wm_dynamixel_hardware_interface/WMDynamixelHardwareInterface
+  joints:
+    - right_wrist_roll_joint
+  id: 1
+  offset: -3.14159
+  direction: -1
+  simulation: false
+  resolution: 4096
+
+sara_head_pitch_dynamixel:
+  type: wm_dynamixel_hardware_interface/WMDynamixelHardwareInterface
+  joints:
+    - head_pitch_joint
+  id: 4
+  offset: 3.14159
+  direction: 1
+  simulation: false
+  resolution: 1024
+
+
+sara_head_yaw_dynamixel: # TODO
+  type: wm_kinova_hardware_interface/WMKinovaHardwareInterface
+  index: 6
+  offset: 0
+  joints:
+    - head_yaw_joint

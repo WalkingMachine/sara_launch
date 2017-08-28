@@ -1,27 +1,66 @@
 <launch>
-    <arg name="base_xtion" default="base_xtion" />
-    <arg name="head_xtion" default="head_xtion" />
-    <arg name="arm_xtion" default="arm_xtion" />
 
-    <include file="$(find sara_description)/launch/sara_description.launch"/>
-    <include file="$(find sara_control)/launch/sara_hardware.launch"/>
-    <include file="$(find sara_launch)/launch/control/sara_controllers.launch"/>
-    <include file="$(find wm_mecanum_cmd)/launch/wm_mecanum_auto.launch"/>
-    <include file="$(find wm_odometry_feedback)/launch/wm_odometry_feedback.launch"/>
-    <include file="$(find sara_moveit)/launch/move_group.launch"/>
-    <include file="$(find wm_moveit_server)/launch/moveit_server.launch"/>
-    <include file="$(find sara_launch)/launch/urg_node/wm_urg_node.launch"/>
-    <include file="$(find sara_navigation)/launch/move_base_amcl.launch"/>
+    <!-- set arguments -->
+        <arg name="base_xtion" default="base_xtion" />
+        <arg name="head_xtion" default="head_xtion" />
+        <arg name="arm_xtion" default="arm_xtion" />
 
-    <include file="$(find sara_launch)/openni2/wm_openni2.launch" >    
-	<arg name="camera" value="$(arg base_xtion)" />
-    </include>
-    <!--
-    <include file="$(find sara_launch)/openni2/wm_openni2.launch" >    
-	<arg name="camera" value="$(arg base_xtion)" />
-    </include>
-    <include file="$(find sara_launch)/openni2/wm_openni2.launch" >    
-	<arg name="camera" value="$(arg arm_xtion)" />
-    </include>
+
+    <!-- start robot description -->
+        <include file="$(find sara_description)/launch/sara_description.launch"/>
+
+    <!-- start ros control related nodes -->
+        <include file="$(find sara_control)/launch/sara_hardware.launch"/>
+        <include file="$(find sara_launch)/launch/control/sara_controllers.launch"/>
+
+    <!--    start the hardwares nodes   -->
+        <include file="$(find robotiq_85_driver)/launch/robotiq_85_driver.launch"/>
+        <include file="$(find wm_dynamixel_node)/launch/wm_dynamixel_node.launch"/>
+        <include file="$(find roboteq_driver)/launch/driveUltime.launch"/>
+        <include file="$(find wm_mecanum_cmd)/launch/wm_mecanum_auto.launch"/>
+        <include file="$(find wm_odometry_feedback)/launch/wm_odometry_feedback.launch"/>
+        <include file="$(find sara_moveit)/launch/move_group.launch"/>
+        <include file="$(find wm_moveit_server)/launch/moveit_server.launch"/>
+
+    <!-- start navigation -->
+        <!--
+            <include file="$(find sara_navigation)/launch/move_base_amcl.launch"/>
+        -->
+
+    <!-- start lidar -->
+        <include file="$(find sara_launch)/launch/urg_node/wm_urg_node.launch"/>
+
+    <!-- start all cameras -->
+        <!--
+            <include file="$(find sara_launch)/launch/openni2/wm_openni2.launch" >
+                <arg name="camera" value="$(arg base_xtion)" />
+            </include>
+
+            <include file="$(find sara_launch)/launch/openni2/wm_openni2.launch" >
+                <arg name="camera" value="$(arg base_xtion)" />
+            </include>
+
+            <include file="$(find sara_launch)/launch/openni2/wm_openni2.launch" >
+                <arg name="camera" value="$(arg arm_xtion)" />
+            </include>
+        -->
+
+    <!-- launch wm_tts -->
+        <include file="$(find wm_tts)/launch/wm_tts_EN.launch"/>
+        <include file="$(find wm_sound_library)/launch/wm_soundboard.launch"/>
+
+
+
+        <include file="$(find lab_ros_speech_to_text)/launch/google_tts.launch"/>
+        <include file="$(find wm_speech_splitter)/launch/sara_speech.launch"/>
+
+    <!--    start the rosserial node
+        <node name="serial"
+            pkg="rosserial_python"
+            type="serial_node.py"
+            output="screen"
+            _port="/dev/ttyUSB3"
+        />
     -->
+
 </launch>
