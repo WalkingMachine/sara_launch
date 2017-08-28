@@ -1,4 +1,5 @@
 <launch>
+
     <!-- set arguments -->
         <arg name="base_xtion" default="base_xtion" />
         <arg name="head_xtion" default="head_xtion" />
