@@ -1,0 +1,4 @@
+<launch>
+  <include file="$(find wm_tts)/launch/wm_tts_EN.launch"/>
+  <include file="$(find sara_vocab)/launch/sara_vocab.launch"/>
+</launch>
