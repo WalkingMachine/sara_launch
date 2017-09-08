@@ -16,6 +16,7 @@
         type="spawner" respawn="false"
  	output="screen" args="sara_joint_state_controller
  	                      sara_arm_trajectory_controller
+ 	                      sara_head_pitch_controller
  	                      sara_gripper_action_controller
  	                       --shutdown-timeout 3"/>
 
