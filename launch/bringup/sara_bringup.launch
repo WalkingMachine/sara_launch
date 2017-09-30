@@ -45,14 +45,13 @@
             </include>
         -->
 
-    <!-- launch wm_tts -->
+    <!-- launch speech related nodes -->
         <include file="$(find wm_tts)/launch/wm_tts_EN.launch"/>
         <include file="$(find wm_sound_library)/launch/wm_soundboard.launch"/>
-
-
-
-        <include file="$(find lab_ros_speech_to_text)/launch/google_tts.launch"/>
-        <include file="$(find wm_speech_splitter)/launch/sara_speech.launch"/>
+        <!--
+            <include file="$(find lab_ros_speech_to_text)/launch/google_tts.launch"/>
+            <include file="$(find wm_speech_splitter)/launch/sara_speech.launch"/>
+        -->
 
     <!--    start the rosserial node
         <node name="serial"

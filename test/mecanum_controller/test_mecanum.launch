@@ -1,0 +1,12 @@
+<launch>
+
+    <!-- start robot description -->
+        <include file="$(find sara_description)/launch/sara_description.launch"/>
+
+    <!-- start hardware -->
+        <include file="$(find sara_launch)/test/mecanum_controller/mecanum_hardware.launch"/>
+
+    <!-- start controller -->
+        <include file="$(find sara_launch)/test/mecanum_controller/mecanum_controller.launch"/>
+
+</launch>

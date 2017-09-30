@@ -1,0 +1,43 @@
+robot_hardware:
+  - sara_front_left_base_joint
+  - sara_front_right_base_joint
+  - sara_rear_left_base_joint
+  - sara_rear_right_base_joint
+
+
+#--<< WHEELS >>--
+sara_front_left_base_joint:
+  type: wm_dynamixel_hardware_interface/WMDynamixelHardwareInterface
+  joints:
+    - front_left_mecanum_wheel_joint
+  id: 1
+  offset: 0
+  direction: 1
+  simulation: true
+
+sara_front_right_base_joint:
+  type: wm_dynamixel_hardware_interface/WMDynamixelHardwareInterface
+  joints:
+    - front_right_mecanum_wheel_joint
+  id: 1
+  offset: 0
+  direction: 1
+  simulation: true
+
+sara_rear_left_base_joint:
+  type: wm_dynamixel_hardware_interface/WMDynamixelHardwareInterface
+  joints:
+    - rear_left_mecanum_wheel_joint
+  id: 1
+  offset: 0
+  direction: 1
+  simulation: true
+
+sara_rear_right_base_joint:
+  type: wm_dynamixel_hardware_interface/WMDynamixelHardwareInterface
+  joints:
+    - rear_right_mecanum_wheel_joint
+  id: 1
+  offset: 0
+  direction: 1
+  simulation: true

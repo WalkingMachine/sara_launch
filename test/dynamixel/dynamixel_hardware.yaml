@@ -37,7 +37,7 @@ sara_head_pitch_dynamixel:
 
 
 sara_head_yaw_dynamixel: # TODO
-  type: wm_kinova_hardware_interface/WMKinovaHardwareInterface
+  type: wm_kinova/WMKinovaHardwareInterface
   index: 6
   offset: 0
   joints:

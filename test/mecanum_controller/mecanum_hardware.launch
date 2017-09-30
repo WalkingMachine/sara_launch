@@ -1,0 +1,15 @@
+<?xml version='1.0'?>
+
+<launch>
+
+    <!-- load the hardware configuration -->
+        <rosparam command="load" file="$(find sara_launch)/test/mecanum_controller/mecanum_hardware.yaml"/>
+
+    <!-- start the hardwares and controller manager loop   -->
+        <node name="sara_control"
+            pkg="sara_control"
+            type="sara_control"
+            output="screen"
+        />
+
+</launch>
