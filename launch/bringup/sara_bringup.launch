@@ -31,11 +31,10 @@
         <include file="$(find sara_launch)/launch/urg_node/wm_urg_node.launch"/>
 
     <!-- start all cameras -->
+        <include file="$(find sara_launch)/launch/openni2/wm_openni2.launch" >
+            <arg name="camera" value="$(arg head_xtion)" />
+        </include>
         <!--
-            <include file="$(find sara_launch)/launch/openni2/wm_openni2.launch" >
-                <arg name="camera" value="$(arg base_xtion)" />
-            </include>
-
             <include file="$(find sara_launch)/launch/openni2/wm_openni2.launch" >
                 <arg name="camera" value="$(arg base_xtion)" />
             </include>
@@ -53,13 +52,8 @@
             <include file="$(find wm_speech_splitter)/launch/sara_speech.launch"/>
         -->
 
-    <!--    start the rosserial node
-        <node name="serial"
-            pkg="rosserial_python"
-            type="serial_node.py"
-            output="screen"
-            _port="/dev/ttyUSB3"
-        />
-    -->
+    <!--    start the face node -->
+        <include file="$(find sara_launch)/launch/face/sara_face.launch" >
+        </include>
 
 </launch>
