@@ -1,6 +1,6 @@
 <launch>
 
-    <!--    start the rosserial node
+    <!--  start the rosserial node  -->
         <node name="serial"
             pkg="rosserial_python"
             type="serial_node.py"

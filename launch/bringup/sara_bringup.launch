@@ -53,7 +53,6 @@
         -->
 
     <!--    start the face node -->
-        <include file="$(find sara_launch)/launch/face/sara_face.launch" >
-        </include>
+        <include file="$(find sara_launch)/launch/face/sara_face.launch" />
 
 </launch>
