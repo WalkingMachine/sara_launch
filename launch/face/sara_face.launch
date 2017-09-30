@@ -1,0 +1,11 @@
+<launch>
+
+    <!--    start the rosserial node
+        <node name="serial"
+            pkg="rosserial_python"
+            type="serial_node.py"
+            output="screen"
+            _port="/dev/face"
+        />
+
+</launch>
