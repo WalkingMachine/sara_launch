@@ -1,7 +1,57 @@
 <launch>
-  <node pkg="leg_detector" type="leg_detector" name="leg_detector" args="scan:=scan $(find cob_leg_detection)/config/trained_leg_detector.yaml" output="screen" >
-		<param name="fixed_frame" value="odom" />
-		<param name="min_points_per_group" value="5" />
+    <node pkg="leg_detector" type="leg_detector" name="leg_detector" args="scan:=scan $(find cob_leg_detection)/config/trained_leg_detector.yaml" output="screen" >
+
+        <!-- Whether or not to require additional seeds -->
+		    <param name="use_seeds" value="false" />
+
+        <!-- Groups of connected laser reads must be within this many meters of each other to be considered a group -->
+		    <param name="connection_threshold" value="0.06" />
+
+		<!-- Number of points required for a group of laser reads to be considered a group -->
+		    <param name="min_points_per_group" value="5" />
+
+		<!-- Only publishes legs with reliability higher than this limit -->
+		    <param name="leg_reliability_limit" value="0.7" />
+
+		<!-- Whether to publish leg_tracker_measurements -->
+		    <param name="publish_legs" value="true" />
+
+		<!-- Whether to publish people_tracker_measurements -->
+		    <param name="publish_people" value="true" />
+
+		<!-- Whether to publish legs as visualization markers -->
+		    <param name="publish_leg_markers" value="true" />
+
+		<!-- Whether to publish people as visualization markers -->
+		    <param name="publish_people_markers" value="true" />
+
+		<!-- Forget a cluster after this many seconds -->
+		    <param name="no_observation_timeout" value="0.5" />
+
+		<!-- seconds -->
+		    <param name="max_second_leg_age" value="2.0" />
+
+		<!-- x -->
+		    <param name="max_track_jump" value="1.0" />
+
+		<!-- x -->
+		    <param name="max_meas_jump" value="0.75" />
+
+		<!-- Pairs of legs can be at most this far from each other -->
+		    <param name="leg_pair_separation" value="1.0" />
+
+		<!-- Topics are published relative to this frame -->
+		    <param name="fixed_frame" value="map" />
+
+		<!-- Used to smooth measurements -->
+		    <param name="kalman_p" value="4" />
+
+		<!-- Used to smooth measurements -->
+		    <param name="kalman_q" value=".002" />
+
+		<!-- Used to smooth measurements -->
+		    <param name="kalman_r" value="10" />
+
 	</node>
 </launch>
 
