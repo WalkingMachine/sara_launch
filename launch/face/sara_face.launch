@@ -8,6 +8,5 @@
             args="_port:=/dev/face"
         >
         </node>
-        <node pkg="rosservice" type="rosservice" name="service_start_face" args="call /sara_face/Start data: true" />
-
+        <node pkg="rosservice" type="rosservice" name="service_start_face" args="call --wait /sara_face/Start 'data: true'" />
 </launch>
