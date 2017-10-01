@@ -8,4 +8,6 @@
             _port="/dev/face"
         />
 
+        <node pkg="rosservice" type="rosservice" name="service_start_face" args="call /sara_face/Start data: true" />
+
 </launch>
