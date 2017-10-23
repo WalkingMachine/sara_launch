@@ -1,10 +1,10 @@
 <launch>
 
     <node pkg="robot_pose_publisher" type="robot_pose_publisher" name="sara_pose_publisher">
-        <arg name="map_frame" value="map" />
-        <arg name="base_frame" value="base_link" />
-        <arg name="publish_frequency" value="10" />
-        <arg name="is_stamped" value="false" />
+        <param name="map_frame" value="map" />
+        <param name="base_frame" value="base_link" />
+        <param name="publish_frequency" value="2" />
+        <param name="is_stamped" value="false" />
 
     </node>
 
