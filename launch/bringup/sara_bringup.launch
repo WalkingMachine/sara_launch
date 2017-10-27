@@ -24,12 +24,12 @@
         <include file="$(find sara_ui)/launch/core_helper.launch"/>
 
     <!-- start navigation -->
-        <!--
             <include file="$(find sara_navigation)/launch/move_base_amcl.launch"/>
-        -->
+            <include file="$(find sara_launch)/launch/robot_pose_publisher/robot_pose_publisher.launch"/>
 
-    <!-- start lidar -->
+    <!-- start scans -->
         <include file="$(find sara_launch)/launch/urg_node/wm_urg_node.launch"/>
+        <include file="$(find sara_launch)/launch/pointcloud_to_laserscan/pointcloud_to_laserscan.launch"/>
 
     <!-- start all cameras -->
         <include file="$(find sara_launch)/launch/openni2/wm_openni2.launch" >

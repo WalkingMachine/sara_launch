@@ -1,0 +1,13 @@
+<launch>
+	<node pkg="pointcloud_to_laserscan" type="pointcloud_to_laserscan_node" name="pointcloud_to_laserscan" >
+		<remap from="/cloud_in" to="/head_xtion/depth/points"/>
+		<remap from="/scan" to="/scan_from_pointcloud"/>
+		<param name="target_frame" value="front_hokuyo_link"/>
+		<param name="angle_max" value="0.39560802"/>
+		<param name="angle_min" value="-0.39560802"/>
+		<param name="angle_increment" value="0.001163553"/>
+		<param name="max_height" value="1.8"/>
+		<param name="min_height" value="0.0"/>
+	</node>
+</launch>
+
