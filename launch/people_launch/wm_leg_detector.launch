@@ -1,5 +1,5 @@
 <launch>
-    <node pkg="leg_detector" type="leg_detector" name="leg_detector" output="screen" >
+    <node pkg="leg_detector" type="leg_detector" name="leg_detector" $(find cob_leg_detection)/config/trained_leg_detector.yaml" output="screen" >
 
         <!-- Whether or not to require additional seeds -->
 		    <param name="use_seeds" value="false" />
