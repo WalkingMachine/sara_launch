@@ -1,5 +1,5 @@
 <launch>
-    <node pkg="leg_detector" type="leg_detector" name="leg_detector" $(find cob_leg_detection)/config/trained_leg_detector.yaml" output="screen" >
+    <node pkg="leg_detector" type="leg_detector" name="leg_detector" args="scan:=scan $(find leg_detector)/config/trained_leg_detector.yaml" output="screen" >
 
         <!-- Whether or not to require additional seeds -->
 		    <param name="use_seeds" value="false" />
@@ -14,7 +14,7 @@
 		    <param name="leg_reliability_limit" value="0.7" />
 
 		<!-- Whether to publish leg_tracker_measurements -->
-		    <param name="publish_legs" value="true" />
+		    <param name="publish_legs" value="false" />
 
 		<!-- Whether to publish people_tracker_measurements -->
 		    <param name="publish_people" value="true" />
