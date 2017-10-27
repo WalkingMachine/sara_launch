@@ -31,6 +31,10 @@
         <include file="$(find sara_launch)/launch/urg_node/wm_urg_node.launch"/>
         <include file="$(find sara_launch)/launch/pointcloud_to_laserscan/pointcloud_to_laserscan.launch"/>
 
+    <!-- start leg detector and peoplefollower node -->
+        <include file="$(find sara_launch)/launch/people_launch/wm_leg_detector.launch"/>
+        <include file="$(find wm_people_follower)/launch/wm_people_follower.launch"/>
+
     <!-- start all cameras -->
         <include file="$(find sara_launch)/launch/openni2/wm_openni2.launch" >
             <arg name="camera" value="$(arg head_xtion)" />
