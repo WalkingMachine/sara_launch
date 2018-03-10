@@ -49,12 +49,14 @@ if ! $HELP
 then
 
     echo "Starting roscore"
+    gnome-terminal --profile=Bringup -x bash -c "source .bashrc ; roscore ; echo -e '$(tput setaf 1)roscore just died$(tput setaf 7)$(tput setab 0)$(tput setaf 7)$(tput setab 0)' >> $(tty); echo -e '$(tput setaf 1)$(tput setab 7)Im dead'; sleep 20"
+
     sleep 3
 
     echo "Starting vizbox"
     VIZ=$(rospack find vizbox)
     gnome-terminal --profile=Bringup -x bash -c "source .bashrc ; cd $VIZ ; ./server.py ; echo -e '$(tput setaf 1)vizbox just died$(tput setaf 7)$(tput setab 0)$(tput setaf 7)$(tput setab 0)' >> $(tty); echo -e '$(tput setaf 1)$(tput setab 7)Im dead'; sleep 20"
-    sleep 3
+
 
     echo "Launching ui helper"
     gnome-terminal --profile=Bringup -x bash -c "source .bashrc ; rosrun sara_ui sara_ui_helper; echo -e '$(tput setaf 1)UI helper just died$(tput setaf 7)$(tput setab 0)' >> $(tty); echo -e '$(tput setaf 1)$(tput setab 7)Im dead'; sleep 20"
@@ -70,10 +72,10 @@ then
     echo "Launching Wonderland"
     gnome-terminal --profile=Bringup -x bash -c "cd ~/sara_ws/wonderland/ ; python manage.py runserver; echo -e '$(tput setaf 1)wonderland just died$(tput setaf 7)$(tput setab 0)' >> $(tty); echo -e '$(tput setaf 1)$(tput setab 7)Im dead'; sleep 20"
 
-    sleep 8
+    sleep 3
 
-#    echo "Launching flexbe core"
-#    gnome-terminal --profile=Bringup -x bash -c "source .bashrc ; roslaunch flexbe_onboard behavior_onboard.launch; echo -e '$(tput setaf 1)flexbe onboard just died$(tput setaf 7)$(tput setab 0)' >> $(tty); echo -e '$(tput setaf 1)$(tput setab 7)Im dead'; sleep 20"
+    echo "Launching flexbe core"
+    gnome-terminal --profile=Bringup -x bash -c "source .bashrc ; roslaunch flexbe_onboard behavior_onboard.launch; echo -e '$(tput setaf 1)flexbe onboard just died$(tput setaf 7)$(tput setab 0)' >> $(tty); echo -e '$(tput setaf 1)$(tput setab 7)Im dead'; sleep 20"
 
 
     if $SPEECH
@@ -121,11 +123,16 @@ then
         gnome-terminal --profile=Bringup -x bash -c "source .bashrc ; rosrun robotiq_c_model_control CModelTcpNode.py 192.168.1.11; echo -e '$(tput setaf 1)geniale just died$(tput setaf 7)$(tput setab 0)' >> $(tty); echo -e '$(tput setaf 1)$(tput setab 7)Im dead'; sleep 20"
     fi
 
+
+    gnome-terminal --profile=Bringup -x bash -c "source .bashrc ; firefox --new-instance http://localhost:8888/"
+    firefox http://localhost:8888/
+
     sleep 6
     if $TELE
     then
         echo "Launching teleop"
         gnome-terminal --profile=Bringup -x bash -c "source .bashrc ; roslaunch sara_teleop sara_teleop.launch; echo -e '$(tput setaf 1)teleop just died$(tput setaf 7)$(tput setab 0)' >> $(tty); echo -e '$(tput setaf 1)$(tput setab 7)Im dead'; sleep 20"
     fi
+
 
 fi
