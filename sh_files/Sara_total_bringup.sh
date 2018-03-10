@@ -9,8 +9,9 @@ TELE=false
 NAV=false
 GENIALE=false
 RVIZ=false
-LANGUE=en-US
+
 while getopts "asvhtfngzl:" opt; do
+
   case "$opt" in
     a)
         ALL=true
@@ -78,6 +79,7 @@ then
     gnome-terminal --profile=Bringup -x bash -c "source .bashrc ; roslaunch flexbe_onboard behavior_onboard.launch; echo -e '$(tput setaf 1)flexbe onboard just died$(tput setaf 7)$(tput setab 0)' >> $(tty); echo -e '$(tput setaf 1)$(tput setab 7)Im dead'; sleep 20"
 
 
+
     if $SPEECH
     then
         echo "Launching google speech to text"
@@ -86,6 +88,7 @@ then
         gnome-terminal --profile=Voice -x bash -c "source .bashrc ; roslaunch wm_speech_splitter sara_speech.launch; echo -e '$(tput setaf 1)Speech splitter just died$(tput setaf 7)$(tput setab 0)' >> $(tty); echo -e '$(tput setaf 1)$(tput setab 7)Im dead'; sleep 20"
         echo "Launching lu4r"
         gnome-terminal --profile=Voice -x bash -c "cd ~/lu4r-0.2.1/lu4r-0.2.1/ ; java -Xmx1G -jar lu4r-server-0.2.1.jar simple amr en 9001; echo -e '$(tput setaf 1)lu4r just died$(tput setaf 7)$(tput setab 0)' >> $(tty); echo -e '$(tput setaf 1)$(tput setab 7)Im dead'; sleep 20"
+
         # echo "echo sara_command"
         # gnome-terminal --profile=Voice -x bash -c "source .bashrc ; rostopic echo /sara_command"
     fi
@@ -102,6 +105,7 @@ then
     then
         echo "Launching navigation"
         gnome-terminal --profile=Bringup -x bash -c "source .bashrc ; roslaunch sara_navigation move_base_amcl.launch; echo -e '$(tput setaf 1)move_base just died$(tput setaf 7)$(tput setab 0)' >> $(tty); echo -e '$(tput setaf 1)$(tput setab 7)Im dead'; sleep 20"
+
     fi
 
 
@@ -109,6 +113,7 @@ then
     then
         echo "Launching flexbe widget"
         gnome-terminal --profile=Bringup -x bash -c "source .bashrc ; roslaunch flexbe_widget behavior_ocs.launch; echo -e '$(tput setaf 1)flexbe widget just died$(tput setaf 7)$(tput setab 0)' >> $(tty); echo -e '$(tput setaf 1)$(tput setab 7)Im dead'; sleep 20"
+
     fi
 
     if $RVIZ
@@ -127,12 +132,11 @@ then
     gnome-terminal --profile=Bringup -x bash -c "source .bashrc ; firefox --new-instance http://localhost:8888/"
     firefox http://localhost:8888/
 
+
     sleep 6
     if $TELE
     then
         echo "Launching teleop"
         gnome-terminal --profile=Bringup -x bash -c "source .bashrc ; roslaunch sara_teleop sara_teleop.launch; echo -e '$(tput setaf 1)teleop just died$(tput setaf 7)$(tput setab 0)' >> $(tty); echo -e '$(tput setaf 1)$(tput setab 7)Im dead'; sleep 20"
     fi
-
-
 fi
