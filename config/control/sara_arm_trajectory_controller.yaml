@@ -15,6 +15,6 @@ sara_arm_trajectory_controller:
     right_shoulder_pitch_joint:   {p: 8,  d: 1, i: 10, i_clamp: 1}
     right_shoulder_yaw_joint:     {p: 7,  d: 1, i: 1, i_clamp: 1}
     right_elbow_pitch_joint:      {p: 7,  d: 0.1, i: 10, i_clamp: 1}
-    right_elbow_yaw_joint:        {p: 5,  d: 0, i: 0, i_clamp: 1}
+    right_elbow_yaw_joint:        {p: 2,  d: 0, i: 0, i_clamp: 1}
     right_wrist_pitch_joint:      {p: 0.6,  d: 0.01, i: 0.01, i_clamp: 1}
-    right_wrist_roll_joint:        {p: 0.8,  d: 0.001, i: 0.1, i_clamp: 1}
+    right_wrist_roll_joint:        {p: 0.6,  d: 0.001, i: 0.1, i_clamp: 1}

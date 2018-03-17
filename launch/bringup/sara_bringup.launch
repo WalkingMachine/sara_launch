@@ -21,10 +21,11 @@
         <include file="$(find wm_odometry_feedback)/launch/wm_odometry_feedback.launch"/>
         <include file="$(find sara_moveit)/launch/move_group.launch"/>
         <include file="$(find wm_moveit_server)/launch/moveit_server.launch"/>
-        <include file="$(find sara_ui)/launch/core_helper.launch"/>
 
-    <!-- start navigation -->
-            <include file="$(find sara_navigation)/launch/move_base_amcl.launch"/>
+    <!-- start trajectory manager -->
+            <include file="$(find wm_trajectory_manager)/launch/trajectory_manager.launch"/>
+
+    <!-- start pose publication -->
             <include file="$(find sara_launch)/launch/robot_pose_publisher/robot_pose_publisher.launch"/>
 
     <!-- start scans -->
@@ -51,13 +52,9 @@
 
     <!-- launch speech related nodes -->
 
-        <include file="$(find wm_tts)/launch/wm_tts_EN.launch"/>
+        <include file="$(find wm_tts)/launch/wm_tts.launch"/>
 
         <include file="$(find wm_sound_library)/launch/wm_soundboard.launch"/>
-        <!--
-            <include file="$(find lab_ros_speech_to_text)/launch/google_tts.launch"/>
-            <include file="$(find wm_speech_splitter)/launch/sara_speech.launch"/>
-        -->
 
     <!--    start the face node -->
         <include file="$(find sara_launch)/launch/face/sara_face.launch" />
