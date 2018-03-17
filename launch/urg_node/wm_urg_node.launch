@@ -3,8 +3,8 @@
     <param name="frame_id" value="front_hokuyo_link"/>
     <rosparam>
       publish_intensity: false
-      angle_min: -1.57
-      angle_max: 1.57
+      angle_min: -2.3
+      angle_max: 2.3
       cluster: 1
       skip: 0
       ip_port: 10940
