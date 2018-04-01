@@ -5,7 +5,7 @@ VISION=false
 SPEECH=false
 HELP=false
 STATEMACHINE=false
-TELE=false
+TELEOP=false
 NAV=false
 GENIALE=false
 RVIZ=false
@@ -23,129 +23,246 @@ while getopts "asvhtfngzl:" opt; do
     n) NAV=true ;;
     s) SPEECH=true ;;
     v) VISION=true ;;
-    t) TELE=true ;;
+    t) TELEOP=true ;;
     f) STATEMACHINE=true ;;
     g) GENIALE=true ;;
     z) RVIZ=true ;;
     l) LANGUE=$OPTARG ;;
     h)
-        echo "SYNOPSIS:"
-        echo " Sara_total_bringup [options]"
-        echo "OPTIONS:"
-        echo " -a  activate all options"
-        echo " -h  show this help message"
-        echo " -f  activate flexbe state machine engine"
-        echo " -n  activate autonaumous navigation"
-        echo " -s  activate speech to text"
-        echo " -t  activate teleoperation"
-        echo " -g  geniale node"
-        echo " -v  activate vision stack"
-        echo " -z  start rviz"
+        echo 'SYNOPSIS:'
+        echo ' Sara_total_bringup [options]'
+        echo 'OPTIONS:'
+        echo ' -a  activate all options'
+        echo ' -h  show this help message'
+        echo ' -f  activate flexbe state machine engine'
+        echo ' -n  activate autonaumous navigation'
+        echo ' -s  activate speech to text'
+        echo ' -t  activate teleoperation'
+        echo ' -g  geniale node'
+        echo ' -v  activate vision stack'
+        echo ' -z  start rviz'
         HELP=true  ;;
   esac
 done
 shift $(( OPTIND - 1 ))
 
+
+
+function cleanup {
+    echo 'killing all processes'
+    for f in $(cat tempPID)
+    do
+        kill -s 1 $f
+    done
+    echo > tempPID
+}
+trap cleanup EXIT
+
+
+
+
+
+
+
+
+
+
+
 if ! $HELP
 then
-
-    echo "Starting roscore"
-    gnome-terminal -x bash -c "source .bashrc ; roscore ; echo -e '$(tput setaf 1)roscore just died$(tput setaf 7)$(tput setab 0)$(tput setaf 7)$(tput setab 0)' >> $(tty); echo -e '$(tput setaf 1)$(tput setab 7)Im dead'; sleep 20"
-
-    sleep 3
-
-    echo "Starting vizbox"
-    VIZ=$(rospack find vizbox)
-    gnome-terminal -x bash -c "source .bashrc ; cd $VIZ ; ./server.py ; echo -e '$(tput setaf 1)vizbox just died$(tput setaf 7)$(tput setab 0)$(tput setaf 7)$(tput setab 0)' >> $(tty); echo -e '$(tput setaf 1)$(tput setab 7)Im dead'; sleep 20"
-
-
-    echo "Launching ui helper"
-    gnome-terminal -x bash -c "source .bashrc ; rosrun sara_ui sara_ui_helper; echo -e '$(tput setaf 1)UI helper just died$(tput setaf 7)$(tput setab 0)' >> $(tty); echo -e '$(tput setaf 1)$(tput setab 7)Im dead'; sleep 20"
-
-    sleep 3
-
-    echo "Setting voice to $LANGUE"
-    rosparam set /langue $LANGUE
-
-    echo "Bringup the hardware"
-    gnome-terminal -x bash -c "source .bashrc ; roslaunch sara_launch sara_bringup.launch; echo -e '$(tput setaf 1)Bringup just died$(tput setaf 7)$(tput setab 0)' >> $(tty); echo -e '$(tput setaf 1)$(tput setab 7)Im dead'; sleep 20"
-
-    echo "Launching Wonderland"
-    gnome-terminal -x bash -c "cd ~/sara_ws/wonderland/ ; python manage.py runserver; echo -e '$(tput setaf 1)wonderland just died$(tput setaf 7)$(tput setab 0)' >> $(tty); echo -e '$(tput setaf 1)$(tput setab 7)Im dead'; sleep 20"
-
-    sleep 3
-
-    echo "Launching flexbe core"
-    gnome-terminal -x bash -c "source .bashrc ; roslaunch flexbe_onboard behavior_onboard.launch; echo -e '$(tput setaf 1)flexbe onboard just died$(tput setaf 7)$(tput setab 0)' >> $(tty); echo -e '$(tput setaf 1)$(tput setab 7)Im dead'; sleep 20"
+    while true
+    do
 
 
 
-    if $SPEECH
-    then
-        echo "Launching google speech to text"
-        gnome-terminal -x bash -c "cd ~ ; source .bashrc ; roslaunch lab_ros_speech_to_text google_tts.launch; echo -e '$(tput setaf 1)lab_ros_stt just died$(tput setaf 7)$(tput setab 0)' >> $(tty); echo -e '$(tput setaf 1)$(tput setab 7)Im dead'; sleep 20"
-        echo "Launching speech splitter"
-        gnome-terminal -x bash -c "source .bashrc ; roslaunch wm_speech_splitter sara_speech.launch; echo -e '$(tput setaf 1)Speech splitter just died$(tput setaf 7)$(tput setab 0)' >> $(tty); echo -e '$(tput setaf 1)$(tput setab 7)Im dead'; sleep 20"
-        echo "Launching lu4r"
-        gnome-terminal -x bash -c "cd ~/lu4r-0.2.1/lu4r-0.2.1/ ; java -Xmx1G -jar lu4r-server-0.2.1.jar simple amr en 9001; echo -e '$(tput setaf 1)lu4r just died$(tput setaf 7)$(tput setab 0)' >> $(tty); echo -e '$(tput setaf 1)$(tput setab 7)Im dead'; sleep 20"
-
-        # echo "echo sara_command"
-        # gnome-terminal -x bash -c "source .bashrc ; rostopic echo /sara_command"
-    fi
-
-    if $VISION
-    then
-        echo "Launching darknet"
-        gnome-terminal -x bash -c "source .bashrc ; roslaunch darknet_ros darknet_ros.launch; echo -e '$(tput setaf 1)darknet just died$(tput setaf 7)$(tput setab 0)' >> $(tty); echo -e '$(tput setaf 1)$(tput setab 7)Im dead'; sleep 20"
-        echo "Launching frame to box"
-        gnome-terminal -x bash -c "source .bashrc ; roslaunch wm_frame_to_box wm_frame_to_box.launch; echo -e '$(tput setaf 1)frame_to_box just died$(tput setaf 7)$(tput setab 0)' >> $(tty); echo -e '$(tput setaf 1)$(tput setab 7)Im dead'; sleep 20"
-        echo "Launching color detector"
-        gnome-terminal -x bash -c "source .bashrc ; roslaunch wm_color_detector wm_color_detector.launch; echo -e '$(tput setaf 1)color_detector just died$(tput setaf 7)$(tput setab 0)' >> $(tty); echo -e '$(tput setaf 1)$(tput setab 7)Im dead'; sleep 20"
-        echo "Launching data_collector"
-        gnome-terminal -x bash -c "source .bashrc ; roslaunch wm_data_collector data_collector.launch; echo -e '$(tput setaf 1)wm_data_collector just died$(tput setaf 7)$(tput setab 0)' >> $(tty); echo -e '$(tput setaf 1)$(tput setab 7)Im dead'; sleep 20"
-
-    fi
-
-    if $NAV 
-    then
-        echo "Launching navigation"
-        gnome-terminal -x bash -c "source .bashrc ; roslaunch sara_navigation move_base_amcl.launch; echo -e '$(tput setaf 1)move_base just died$(tput setaf 7)$(tput setab 0)' >> $(tty); echo -e '$(tput setaf 1)$(tput setab 7)Im dead'; sleep 20"
-
-    fi
+        echo 'waiting for power'
+        while [ ! -r /dev/dynamixel ] || [ ! -r /dev/robotiq ] || [ ! -r /dev/drive1 ]
+        do
+            sleep 1
+        done
+        echo > tempPID
 
 
-    if $STATEMACHINE
-    then
-        echo "Launching flexbe widget"
-        gnome-terminal -x bash -c "source .bashrc ; roslaunch flexbe_widget behavior_ocs.launch; echo -e '$(tput setaf 1)flexbe widget just died$(tput setaf 7)$(tput setab 0)' >> $(tty); echo -e '$(tput setaf 1)$(tput setab 7)Im dead'; sleep 20"
-
-    fi
-
-    if $RVIZ
-    then
-        echo "Launching rviz"
-        gnome-terminal -x bash -c "source .bashrc ; rviz; echo -e '$(tput setaf 1)rviz just died$(tput setaf 7)$(tput setab 0)' >> $(tty); echo -e '$(tput setaf 1)$(tput setab 7)Im dead'; sleep 20"
-    fi
-
-    if $GENIALE
-    then
-        echo "Launching geniale nodes"
-        gnome-terminal -x bash -c "source .bashrc ; rosrun robotiq_c_model_control CModelTcpNode.py 192.168.1.11; echo -e '$(tput setaf 1)geniale just died$(tput setaf 7)$(tput setab 0)' >> $(tty); echo -e '$(tput setaf 1)$(tput setab 7)Im dead'; sleep 20"
-    fi
 
 
-    gnome-terminal -x bash -c "source .bashrc ; firefox --new-instance http://localhost:8888/"
+        echo 'Starting roscore'
+        echo 'roscore' > tempCMD
+        echo '; echo -e "$(tput setaf 1)roscore just died$(tput setaf 7)$(tput setab 0)$(tput setaf 7)$(tput setab 0)" >> $(tty)' >> tempCMD
+        echo '; echo -e "$(tput setaf 1)$(tput setab 7)Im dead"; sleep 20' >> tempCMD
+        gnome-terminal --hide-menubar --profile=SARA ; sleep 1 ; rm tempCMD
 
 
-    gnome-terminal -x bash -c "source .bashrc ; firefox --new-instance http://localhost:8888/"
-
-    sleep 3
-    if $TELE
-    then
-        echo "Launching teleop"
-        gnome-terminal -x bash -c "source .bashrc ; roslaunch sara_teleop sara_teleop.launch; echo -e '$(tput setaf 1)teleop just died$(tput setaf 7)$(tput setab 0)' >> $(tty); echo -e '$(tput setaf 1)$(tput setab 7)Im dead'; sleep 20"
-    fi
+#        echo 'Starting soundboard'
+#        echo "" > tempCMD
+#        echo '; echo -e "$(tput setaf 1)vizbox just died$(tput setaf 7)$(tput setab 0)$(tput setaf 7)$(tput setab 0)" >> $(tty)' >> tempCMD
+#        echo '; echo -e "$(tput setaf 1)$(tput setab 7)Im dead"; sleep 20' >> tempCMD
+#        gnome-terminal --hide-menubar --profile=SARA ; sleep 1 ; rm tempCMD
 
 
+
+        echo 'Starting vizbox'
+        VIZ=$(rospack find vizbox)
+        echo "cd $VIZ ; ./server.py" > tempCMD
+        echo '; echo -e "$(tput setaf 1)vizbox just died$(tput setaf 7)$(tput setab 0)$(tput setaf 7)$(tput setab 0)" >> $(tty)' >> tempCMD
+        echo '; echo -e "$(tput setaf 1)$(tput setab 7)Im dead"; sleep 20' >> tempCMD
+        gnome-terminal --hide-menubar --profile=SARA ; sleep 1 ; rm tempCMD
+
+        echo 'Launching ui helper'
+        echo 'rosrun sara_ui sara_ui_helper' > tempCMD
+        echo '; echo -e "$(tput setaf 1)UI helper just died$(tput setaf 7)$(tput setab 0)$(tput setaf 7)$(tput setab 0)" >> $(tty)' >> tempCMD
+        echo '; echo -e "$(tput setaf 1)$(tput setab 7)Im dead"; sleep 20' >> tempCMD
+        gnome-terminal --hide-menubar --profile=SARA ; sleep 1 ; rm tempCMD
+
+
+        echo 'Setting voice to $LANGUE'
+        rosparam set /langue $LANGUE
+
+        echo 'Bringup the hardware'
+        echo 'roslaunch sara_launch sara_bringup.launch' > tempCMD
+        echo '; echo -e "$(tput setaf 1)sara_bringup just died$(tput setaf 7)$(tput setab 0)$(tput setaf 7)$(tput setab 0)" >> $(tty)' >> tempCMD
+        echo '; echo -e "$(tput setaf 1)$(tput setab 7)Im dead"; sleep 20' >> tempCMD
+        gnome-terminal --hide-menubar --profile=SARA ; sleep 1 ; rm tempCMD
+
+        echo 'Launching Wonderland'
+        echo 'cd ~/sara_ws/wonderland/ ; python manage.py runserver' > tempCMD
+        echo '; echo -e "$(tput setaf 1)wonderland just died$(tput setaf 7)$(tput setab 0)$(tput setaf 7)$(tput setab 0)" >> $(tty)' >> tempCMD
+        echo '; echo -e "$(tput setaf 1)$(tput setab 7)Im dead"; sleep 20' >> tempCMD
+        gnome-terminal --hide-menubar --profile=SARA ; sleep 1 ; rm tempCMD
+
+
+
+        echo 'Launching flexbe core'
+        echo 'roslaunch flexbe_onboard behavior_onboard.launch' > tempCMD
+        echo '; echo -e "$(tput setaf 1)flexbe just died$(tput setaf 7)$(tput setab 0)$(tput setaf 7)$(tput setab 0)" >> $(tty)' >> tempCMD
+        echo '; echo -e "$(tput setaf 1)$(tput setab 7)Im dead"; sleep 20' >> tempCMD
+        gnome-terminal --hide-menubar --profile=SARA ; sleep 1 ; rm tempCMD
+
+
+        sleep 2
+
+
+        if ${SPEECH}
+        then
+            echo 'Launching google speech to text'
+            echo 'roslaunch lab_ros_speech_to_text google_tts.launch' > tempCMD
+            echo '; echo -e "$(tput setaf 1)lab_ros_stt just died$(tput setaf 7)$(tput setab 0)$(tput setaf 7)$(tput setab 0)" >> $(tty)' >> tempCMD
+            echo '; echo -e "$(tput setaf 1)$(tput setab 7)Im dead"; sleep 20' >> tempCMD
+
+            gnome-terminal --hide-menubar --profile=SARA ; sleep 1 ; rm tempCMD
+
+            echo 'Launching speech splitter'
+            echo 'roslaunch wm_speech_splitter sara_speech.launch' > tempCMD
+            echo '; echo -e "$(tput setaf 1)Speech splitter just died$(tput setaf 7)$(tput setab 0)$(tput setaf 7)$(tput setab 0)" >> $(tty)' >> tempCMD
+            echo '; echo -e "$(tput setaf 1)$(tput setab 7)Im dead"; sleep 20' >> tempCMD
+
+            gnome-terminal --hide-menubar --profile=SARA ; sleep 1 ; rm tempCMD
+
+            echo 'Launching lu4r'
+            echo 'cd ~/lu4r-0.2.1/lu4r-0.2.1/ ; java -Xmx1G -jar lu4r-server-0.2.1.jar simple amr en 9001' > tempCMD
+            echo '; echo -e "$(tput setaf 1)lu4r just died$(tput setaf 7)$(tput setab 0)$(tput setaf 7)$(tput setab 0)" >> $(tty)' >> tempCMD
+            echo '; echo -e "$(tput setaf 1)$(tput setab 7)Im dead"; sleep 20' >> tempCMD
+
+            gnome-terminal --hide-menubar --profile=SARA ; sleep 1 ; rm tempCMD
+
+        fi
+
+        if ${VISION}
+        then
+            echo 'Launching darknet'
+            echo 'roslaunch darknet_ros darknet_ros.launch' > tempCMD
+            echo '; echo -e "$(tput setaf 1)darknet just died$(tput setaf 7)$(tput setab 0)$(tput setaf 7)$(tput setab 0)" >> $(tty)' >> tempCMD
+            echo '; echo -e "$(tput setaf 1)$(tput setab 7)Im dead"; sleep 20' >> tempCMD
+            gnome-terminal --hide-menubar --profile=SARA ; sleep 1 ; rm tempCMD
+
+            echo 'Launching frame to box'
+            echo 'roslaunch wm_frame_to_box wm_frame_to_box.launch' > tempCMD
+            echo '; echo -e "$(tput setaf 1)frame_to_box just died$(tput setaf 7)$(tput setab 0)$(tput setaf 7)$(tput setab 0)" >> $(tty)' >> tempCMD
+            echo '; echo -e "$(tput setaf 1)$(tput setab 7)Im dead"; sleep 20' >> tempCMD
+            gnome-terminal --hide-menubar --profile=SARA ; sleep 1 ; rm tempCMD
+
+            echo 'Launching color detector'
+            echo 'roslaunch wm_color_detector wm_color_detector.launch' > tempCMD
+            echo '; echo -e "$(tput setaf 1)color_detector just died$(tput setaf 7)$(tput setab 0)$(tput setaf 7)$(tput setab 0)" >> $(tty)' >> tempCMD
+            echo '; echo -e "$(tput setaf 1)$(tput setab 7)Im dead"; sleep 20' >> tempCMD
+            gnome-terminal --hide-menubar --profile=SARA ; sleep 1 ; rm tempCMD
+
+            echo 'Launching data_collector'
+            echo 'roslaunch wm_data_collector data_collector.launch' > tempCMD
+            echo '; echo -e "$(tput setaf 1)wm_data_collector just died$(tput setaf 7)$(tput setab 0)$(tput setaf 7)$(tput setab 0)" >> $(tty)' >> tempCMD
+            echo '; echo -e "$(tput setaf 1)$(tput setab 7)Im dead"; sleep 20' >> tempCMD
+            gnome-terminal --hide-menubar --profile=SARA ; sleep 1 ; rm tempCMD
+
+        fi
+
+        if ${NAV}
+        then
+            echo 'Launching navigation'
+            echo 'roslaunch sara_navigation move_base_amcl.launch' > tempCMD
+            echo '; echo -e "$(tput setaf 1)move_base just died$(tput setaf 7)$(tput setab 0)$(tput setaf 7)$(tput setab 0)" >> $(tty)' >> tempCMD
+            echo '; echo -e "$(tput setaf 1)$(tput setab 7)Im dead"; sleep 20' >> tempCMD
+            gnome-terminal --hide-menubar --profile=SARA ; sleep 1 ; rm tempCMD
+
+        fi
+
+
+        if ${STATEMACHINE}
+        then
+            echo 'Launching flexbe widget'
+            echo 'roslaunch flexbe_widget behavior_ocs.launch' > tempCMD
+            echo '; echo -e "$(tput setaf 1)flexbe widget just died$(tput setaf 7)$(tput setab 0)$(tput setaf 7)$(tput setab 0)" >> $(tty)' >> tempCMD
+            echo '; echo -e "$(tput setaf 1)$(tput setab 7)Im dead"; sleep 20' >> tempCMD
+            gnome-terminal --hide-menubar --profile=SARA ; sleep 1 ; rm tempCMD
+
+        fi
+
+        if ${RVIZ}
+        then
+            echo 'Launching rviz'
+            echo 'rviz' > tempCMD
+            echo '; echo -e "$(tput setaf 1)rviz just died$(tput setaf 7)$(tput setab 0)$(tput setaf 7)$(tput setab 0)" >> $(tty)' >> tempCMD
+            echo '; echo -e "$(tput setaf 1)$(tput setab 7)Im dead"; sleep 20' >> tempCMD
+            gnome-terminal --hide-menubar --profile=SARA ; sleep 1 ; rm tempCMD
+
+        fi
+
+        if ${GENIALE}
+        then
+            echo 'Launching geniale nodes'
+            echo 'rosrun robotiq_c_model_control CModelTcpNode.py 192.168.1.11' > tempCMD
+            echo '; echo -e "$(tput setaf 1)geniale node just died$(tput setaf 7)$(tput setab 0)$(tput setaf 7)$(tput setab 0)" >> $(tty)' >> tempCMD
+            echo '; echo -e "$(tput setaf 1)$(tput setab 7)Im dead"; sleep 20' >> tempCMD
+            gnome-terminal --hide-menubar --profile=SARA ; sleep 1 ; rm tempCMD
+
+        fi
+
+
+        sleep 10
+        if ${TELEOP}
+        then
+            echo 'Launching teleop'
+            echo 'roslaunch sara_teleop sara_teleop.launch' > tempCMD
+            echo '; echo -e "$(tput setaf 1)teleop node just died$(tput setaf 7)$(tput setab 0)$(tput setaf 7)$(tput setab 0)" >> $(tty)' >> tempCMD
+            echo '; echo -e "$(tput setaf 1)$(tput setab 7)Im dead"; sleep 20' >> tempCMD
+            gnome-terminal --hide-menubar --profile=SARA ; sleep 1 ; rm tempCMD
+
+        fi
+
+
+        echo "fully running"
+
+
+        while [ -r /dev/dynamixel ] && [ -r /dev/robotiq ] && [ -r /dev/drive1 ]
+        do
+            sleep 1
+        done
+        echo '$(tput setaf 1)Sara is dead. For now...$(tput setaf 7)'
+
+
+
+
+
+        cleanup
+    done
 
 fi
+
