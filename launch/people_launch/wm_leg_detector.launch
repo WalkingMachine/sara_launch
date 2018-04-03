@@ -11,7 +11,7 @@
 		    <param name="min_points_per_group" value="5" />
 
 		<!-- Only publishes legs with reliability higher than this limit -->
-		    <param name="leg_reliability_limit" value="0.95" />
+		    <param name="leg_reliability_limit" value="0.7" />
 
 		<!-- Whether to publish leg_tracker_measurements -->
 		    <param name="publish_legs" value="false" />
