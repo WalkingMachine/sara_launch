@@ -9,6 +9,7 @@ TELEOP=false
 NAV=false
 GENIALE=false
 RVIZ=false
+LANGUE="en-US"
 
 while getopts "asvhtfngzl:" opt; do
 
@@ -114,7 +115,7 @@ then
         sleep 0.5 ; gnome-terminal --hide-menubar --profile=SARA ; sleep 0.5
 
 
-        echo 'Setting voice to $LANGUE'
+        echo "Setting voice to $LANGUE"
         rosparam set /langue $LANGUE
 
         echo 'Bringup the hardware'
