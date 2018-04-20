@@ -1,0 +1,15 @@
+#
+# Custom .bashrc for develeopment terminal profile
+#
+if [ -r "/etc/bash.bashrc" ]; then
+    . "/etc/bash.bashrc"
+fi
+
+if [ -r "$HOME/.bashrc" ]; then
+    . "$HOME/.bashrc"
+fi
+
+# add your dev-specific stuff here
+echo $$ >> ~/tempPID
+
+eval $SARACMD

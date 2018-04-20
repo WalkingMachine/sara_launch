@@ -9,6 +9,7 @@ TELEOP=false
 NAV=false
 GENIALE=false
 RVIZ=false
+LANGUE="en-US"
 
 while getopts "asvhtfngzl:" opt; do
 
@@ -51,11 +52,11 @@ shift $(( OPTIND - 1 ))
 # Function that can kill all orbital terminals
 function cleanup {
     echo 'killing all processes'
-    for f in $(cat tempPID)
+    for f in $(cat ~/tempPID)
     do
         kill -s 1 $f
     done
-    echo > tempPID
+    echo > ~/tempPID
 }
 trap cleanup EXIT
 
