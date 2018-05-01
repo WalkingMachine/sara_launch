@@ -7,7 +7,7 @@
 		<param name="angle_min" value="-0.39560802"/>
 		<param name="angle_increment" value="0.001163553"/>
 		<param name="max_height" value="1.8"/>
-		<param name="min_height" value="0.0"/>
+		<param name="min_height" value="-0.01"/>
 	</node>
 </launch>
 

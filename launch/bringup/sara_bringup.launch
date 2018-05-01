@@ -23,14 +23,14 @@
         <include file="$(find wm_moveit_server)/launch/moveit_server.launch"/>
 
     <!-- start trajectory manager -->
-            <include file="$(find wm_trajectory_manager)/launch/trajectory_manager.launch"/>
+        <include file="$(find wm_trajectory_manager)/launch/trajectory_manager.launch"/>
 
     <!-- start pose publication -->
-            <include file="$(find sara_launch)/launch/robot_pose_publisher/robot_pose_publisher.launch"/>
+        <include file="$(find sara_launch)/launch/robot_pose_publisher/robot_pose_publisher.launch"/>
 
     <!-- start scans -->
         <include file="$(find sara_launch)/launch/urg_node/wm_urg_node.launch"/>
-        <!-- <include file="$(find sara_launch)/launch/pointcloud_to_laserscan/pointcloud_to_laserscan.launch"/> -->
+        <include file="$(find sara_launch)/launch/pointcloud_to_laserscan/pointcloud_to_laserscan.launch"/>
 
     <!-- start leg detector and peoplefollower node -->
         <include file="$(find sara_launch)/launch/people_launch/wm_leg_detector.launch"/>
@@ -41,12 +41,10 @@
         </include>
 
     <!-- launch speech related nodes -->
-
         <include file="$(find wm_tts)/launch/wm_tts.launch"/>
-
         <include file="$(find wm_sound_library)/launch/wm_soundboard.launch"/>
 
-    <!--    start the face node -->
+    <!-- start the face node -->
         <include file="$(find sara_launch)/launch/face/sara_face.launch" />
 
 </launch>

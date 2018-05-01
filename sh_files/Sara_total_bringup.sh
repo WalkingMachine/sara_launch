@@ -101,6 +101,7 @@ then
 
 
 
+
         echo 'Starting vizbox'
         VIZ=$(rospack find vizbox)
         SARACMD="cd $VIZ ; ./server.py"
@@ -115,7 +116,7 @@ then
         gnome-terminal --hide-menubar --profile=SARA
 
 
-        echo 'Setting voice to $LANGUE'
+        echo "Setting voice to $LANGUE"
         rosparam set /langue $LANGUE
 
         echo 'Bringup the hardware'
@@ -148,21 +149,19 @@ then
             SARACMD='roslaunch lab_ros_speech_to_text google_tts.launch'
             SARACMD+='; echo -e "$(tput setaf 1)lab_ros_stt just died$(tput setaf 7)$(tput setab 0)$(tput setaf 7)$(tput setab 0)" >> $(tty)'
             SARACMD+='; echo -e "$(tput setaf 1)$(tput setab 7)Im dead"; sleep 20'
-
             gnome-terminal --hide-menubar --profile=SARA
+
 
             echo 'Launching speech splitter'
             SARACMD='roslaunch wm_speech_splitter sara_speech.launch'
             SARACMD+='; echo -e "$(tput setaf 1)Speech splitter just died$(tput setaf 7)$(tput setab 0)$(tput setaf 7)$(tput setab 0)" >> $(tty)'
             SARACMD+='; echo -e "$(tput setaf 1)$(tput setab 7)Im dead"; sleep 20'
-
             gnome-terminal --hide-menubar --profile=SARA
 
             echo 'Launching lu4r'
             SARACMD='cd ~/lu4r-0.2.1/lu4r-0.2.1/ ; java -Xmx1G -jar lu4r-server-0.2.1.jar simple amr en 9001'
             SARACMD+='; echo -e "$(tput setaf 1)lu4r just died$(tput setaf 7)$(tput setab 0)$(tput setaf 7)$(tput setab 0)" >> $(tty)'
             SARACMD+='; echo -e "$(tput setaf 1)$(tput setab 7)Im dead"; sleep 20'
-
             gnome-terminal --hide-menubar --profile=SARA
 
         fi
@@ -192,7 +191,6 @@ then
             SARACMD+='; echo -e "$(tput setaf 1)wm_data_collector just died$(tput setaf 7)$(tput setab 0)$(tput setaf 7)$(tput setab 0)" >> $(tty)'
             SARACMD+='; echo -e "$(tput setaf 1)$(tput setab 7)Im dead"; sleep 20'
             gnome-terminal --hide-menubar --profile=SARA
-
         fi
 
         if ${NAV}
@@ -255,9 +253,6 @@ then
             sleep 1
         done
         echo '$(tput setaf 1)Sara is dead. For now...$(tput setaf 7)'
-
-
-
 
 
         cleanup
