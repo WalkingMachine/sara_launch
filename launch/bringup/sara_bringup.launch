@@ -34,7 +34,6 @@
 
     <!-- start leg detector and peoplefollower node -->
         <include file="$(find sara_launch)/launch/people_launch/wm_leg_detector.launch"/>
-        <include file="$(find wm_people_follower)/launch/wm_people_follower.launch"/>
 
     <!-- start all cameras -->
         <include file="$(find sara_launch)/launch/openni2/wm_openni2.launch" >

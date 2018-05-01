@@ -19,12 +19,15 @@
   <arg name="depth_camera_info_url" default="" />
 
   <!-- Hardware depth registration -->
-  <arg name="depth_registration" default="true" />
+  <arg name="depth_registration" default="false" />
 
   <!-- Driver parameters -->
   <arg name="color_depth_synchronization"     default="false" />
-  <arg name="auto_exposure"                   default="false" />
-  <arg name="auto_white_balance"              default="false" />
+  <arg name="auto_exposure"                   default="true" />
+  <arg name="auto_white_balance"              default="true" />
+  <arg name="data_skip"                       default="0" />
+  <arg name="exposure"                        default="50" />
+  <arg name="color_depth_synchronisation"     default="true" />
 
   <!-- Arguments for remapping all device namespaces -->
   <arg name="rgb"              default="rgb" />
@@ -37,10 +40,10 @@
   <arg name="load_driver" default="true" />
   <arg name="publish_tf" default="true" />
   <!-- Processing Modules -->
-  <arg name="rgb_processing"                  default="true"  />
+  <arg name="rgb_processing"                  default="false"  />
   <arg name="debayer_processing"              default="false" />
   <arg name="ir_processing"                   default="false" />
-  <arg name="depth_processing"                default="true" />
+  <arg name="depth_processing"                default="false" />
   <arg name="depth_registered_processing"     default="false" />
   <arg name="disparity_processing"            default="false" />
   <arg name="disparity_registered_processing" default="false" />
@@ -84,6 +87,9 @@
       <arg name="color_depth_synchronization"     value="$(arg color_depth_synchronization)" />
       <arg name="auto_exposure"                   value="$(arg auto_exposure)" />
       <arg name="auto_white_balance"              value="$(arg auto_white_balance)" />
+      <param name="driver/data_skip"              value="$(arg data_skip)" />
+      <param name="driver/exposure"               value="$(arg exposure)" />
+
     </include>
 
     <!-- Load standard constellation of processing nodelets -->
@@ -102,6 +108,8 @@
       <arg name="disparity_registered_processing" value="$(arg disparity_registered_processing)" />
       <arg name="hw_registered_processing"        value="$(arg hw_registered_processing)" />
       <arg name="sw_registered_processing"        value="$(arg sw_registered_processing)" />
+      <param name="driver/data_skip"              value="$(arg data_skip)" />
+      <param name="driver/exposure"               value="$(arg exposure)" />
     </include>
 
   </group> <!-- camera -->
