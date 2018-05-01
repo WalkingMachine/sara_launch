@@ -11,10 +11,10 @@
 		    <param name="min_points_per_group" value="5" />
 
 		<!-- Only publishes legs with reliability higher than this limit -->
-		    <param name="leg_reliability_limit" value="0.7" />
+		    <param name="leg_reliability_limit" value="0.8" />
 
 		<!-- Whether to publish leg_tracker_measurements -->
-		    <param name="publish_legs" value="false" />
+		    <param name="publish_legs" value="true" />
 
 		<!-- Whether to publish people_tracker_measurements -->
 		    <param name="publish_people" value="true" />
@@ -26,10 +26,10 @@
 		    <param name="publish_people_markers" value="true" />
 
 		<!-- Forget a cluster after this many seconds -->
-		    <param name="no_observation_timeout" value="5" />
+		    <param name="no_observation_timeout" value="0.5" />
 
 		<!-- seconds -->
-		    <param name="max_second_leg_age" value="2.0" />
+		    <param name="max_second_leg_age" value="0.2" />
 
 		<!-- x -->
 		    <param name="max_track_jump" value="1.0" />
