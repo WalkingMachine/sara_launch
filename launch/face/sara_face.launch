@@ -5,36 +5,7 @@
             pkg="rosserial_python"
             type="serial_node.py"
             output="screen"
-            args="_port:=/dev/face1"
+            args="_port:=/dev/face"
         >
-        </node>
-        <node name="serial2"
-            pkg="rosserial_python"
-            type="serial_node.py"
-            output="screen"
-            args="_port:=/dev/face2"
-        >
-        </node>
-        <node name="serial3"
-            pkg="rosserial_python"
-            type="serial_node.py"
-            output="screen"
-            args="_port:=/dev/face3"
-        >
-        </node>
-        <node name="serial4"
-            pkg="rosserial_python"
-            type="serial_node.py"
-            output="screen"
-            args="_port:=/dev/face4"
-        >
-        </node>
-        <node name="serial5"
-            pkg="rosserial_python"
-            type="serial_node.py"
-            output="screen"
-            args="_port:=/dev/face5"
-        >
-        </node>
         <node pkg="rosservice" type="rosservice" name="service_start_face" args="call --wait /sara_face/Start 'data: true'" />
 </launch>
