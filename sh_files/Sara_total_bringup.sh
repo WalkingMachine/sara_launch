@@ -139,6 +139,11 @@ then
         SARACMD+='; echo -e "$(tput setaf 1)$(tput setab 7)Im dead"; sleep 20'
         gnome-terminal --hide-menubar --profile=SARA
 
+        echo 'Launching direction to point service'
+        SARACMD='rosrun wm_direction_to_point direction_to_point_server.py'
+        SARACMD+='; echo -e "$(tput setaf 1)direction to point just died$(tput setaf 7)$(tput setab 0)$(tput setaf 7)$(tput setab 0)" >> $(tty)'
+        SARACMD+='; echo -e "$(tput setaf 1)$(tput setab 7)Im dead"; sleep 20'
+        gnome-terminal --hide-menubar --profile=SARA
 
         sleep 2
 
