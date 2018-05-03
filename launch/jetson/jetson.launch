@@ -1,0 +1,15 @@
+<launch>
+
+
+    <!-- set arguments -->
+        <arg name="base_xtion" default="base_xtion" />
+        <arg name="head_xtion" default="head_xtion" />
+        <arg name="arm_xtion" default="arm_xtion" />
+
+    <!-- start all cameras -->
+        <include file="$(find sara_launch)/launch/openni2/wm_openni2.launch" >
+            <arg name="camera" value="$(arg head_xtion)" />
+        </include>
+
+
+</launch>
