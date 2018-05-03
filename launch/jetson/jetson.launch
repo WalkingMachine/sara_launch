@@ -11,5 +11,9 @@
             <arg name="camera" value="$(arg head_xtion)" />
         </include>
 
+    <!-- start darknet -->
+        <include file="$(find darknet)ros)/launch/darknet_ros.launch" >
+        </include>
+
 
 </launch>
