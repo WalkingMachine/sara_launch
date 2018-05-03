@@ -86,20 +86,19 @@ then
 
 
 
-        echo 'Starting roscore'
-        SARACMD='ssh nvidia@sara-jetson1'
+        echo 'Starting roscore ; sleep 3'
+        #SARACMD='ssh nvidia@sara-jetson1'
         SARACMD+='roscore'
         SARACMD+='; echo -e "$(tput setaf 1)roscore just died$(tput setaf 7)$(tput setab 0)$(tput setaf 7)$(tput setab 0)" >> $(tty)'
         SARACMD+='; echo -e "$(tput setaf 1)$(tput setab 7)Im dead"; sleep 20'
         gnome-terminal --hide-menubar --profile=SARA
-
+        sleep 8
 
 #        echo 'Starting soundboard'
 #        echo ""
 #        SARACMD+='; echo -e "$(tput setaf 1)soundboard just died$(tput setaf 7)$(tput setab 0)$(tput setaf 7)$(tput setab 0)" >> $(tty)'
 #        SARACMD+='; echo -e "$(tput setaf 1)$(tput setab 7)Im dead"; sleep 20'
 #        gnome-terminal --hide-menubar --profile=SARA
-
 
 
 
@@ -126,13 +125,13 @@ then
         SARACMD+='; echo -e "$(tput setaf 1)$(tput setab 7)Im dead"; sleep 20'
         gnome-terminal --hide-menubar --profile=SARA
 
-
-        echo 'Bringup the jetson'
-        SARACMD='ssh nvidia@sara-jetson1'
-        SARACMD+='roslaunch sara_launch jetson.launch'
-        SARACMD+='; echo -e "$(tput setaf 1)jetson just died$(tput setaf 7)$(tput setab 0)$(tput setaf 7)$(tput setab 0)" >> $(tty)'
-        SARACMD+='; echo -e "$(tput setaf 1)$(tput setab 7)Im dead"; sleep 20'
-        gnome-terminal --hide-menubar --profile=SARA
+#
+#        echo 'Bringup the jetson'
+#        SARACMD='ssh nvidia@sara-jetson1 ; sleep 3'
+#        SARACMD+='; roslaunch sara_launch jetson.launch'
+#        SARACMD+='; echo -e "$(tput setaf 1)jetson just died$(tput setaf 7)$(tput setab 0)$(tput setaf 7)$(tput setab 0)" >> $(tty)'
+#        SARACMD+='; echo -e "$(tput setaf 1)$(tput setab 7)Im dead"; sleep 20'
+#        gnome-terminal --hide-menubar --profile=SARA
 
 
 

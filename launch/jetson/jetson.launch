@@ -10,10 +10,10 @@
         <include file="$(find sara_launch)/launch/openni2/wm_openni2.launch" >
             <arg name="camera" value="$(arg head_xtion)" />
         </include>
-
+<!--
     <!-- start darknet -->
         <include file="$(find darknet_ros)/launch/darknet_ros.launch" >
         </include>
-
+-->
 
 </launch>
