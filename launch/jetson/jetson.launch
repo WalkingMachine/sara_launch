@@ -14,6 +14,6 @@
     <!-- start darknet -->
         <include file="$(find darknet_ros)/launch/darknet_ros.launch" >
         </include>
--->
+--/>
 
 </launch>
