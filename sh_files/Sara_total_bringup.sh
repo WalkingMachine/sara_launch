@@ -183,11 +183,11 @@ then
 
         if ${VISION}
         then
-            echo 'Launching darknet'
-            SARACMD='roslaunch darknet_ros darknet_ros.launch'
-            SARACMD+='; echo -e "$(tput setaf 1)darknet just died$(tput setaf 7)$(tput setab 0)$(tput setaf 7)$(tput setab 0)" >> $(tty)'
-            SARACMD+='; echo -e "$(tput setaf 1)$(tput setab 7)Im dead"; sleep 20'
-            gnome-terminal --hide-menubar --profile=SARA
+#            echo 'Launching darknet'
+#            SARACMD='roslaunch darknet_ros darknet_ros.launch'
+#            SARACMD+='; echo -e "$(tput setaf 1)darknet just died$(tput setaf 7)$(tput setab 0)$(tput setaf 7)$(tput setab 0)" >> $(tty)'
+#            SARACMD+='; echo -e "$(tput setaf 1)$(tput setab 7)Im dead"; sleep 20'
+#            gnome-terminal --hide-menubar --profile=SARA
 
             echo 'Launching frame to box'
             SARACMD='roslaunch wm_frame_to_box wm_frame_to_box.launch'
