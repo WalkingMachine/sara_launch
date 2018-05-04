@@ -1,8 +1,5 @@
 <launch>
 
-    <machine name="jetson1" address="sara-jetson1" env-loader="/opt/ros/kinetic/env.sh" user="nvidia" default="true"/>
-
-
     <!-- set arguments -->
         <arg name="base_xtion" default="base_xtion" />
         <arg name="head_xtion" default="head_xtion" />

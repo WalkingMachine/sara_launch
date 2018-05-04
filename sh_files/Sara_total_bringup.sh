@@ -98,7 +98,7 @@ then
 
 
         echo 'Starting jetson'
-        SARACMD="ssh nvidia@sara-jetson1 'bash -s' < $(rospack find sara_launch)/sh_files/launch_jetson.sh"
+        SARACMD="ssh nvidia@sara-jetson1 'cd /home/nvidia ; roslaunch sara_launch jetson.launch'"
         SARACMD+='; echo -e "$(tput setaf 1)jetson just died$(tput setaf 7)$(tput setab 0)$(tput setaf 7)$(tput setab 0)" >> $(tty)'
         SARACMD+='; echo -e "$(tput setaf 1)$(tput setab 7)Im dead"; sleep 20'
         gnome-terminal --hide-menubar --profile=SARA
