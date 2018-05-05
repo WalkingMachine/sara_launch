@@ -9,9 +9,10 @@ TELEOP=false
 NAV=false
 GENIALE=false
 RVIZ=false
+JET=true
 LANGUE="en-US"
 
-while getopts "asvhtfngzl:" opt; do
+while getopts "asvhtfJngzl:" opt; do
 
   case "$opt" in
     a)
@@ -24,6 +25,7 @@ while getopts "asvhtfngzl:" opt; do
     n) NAV=true ;;
     s) SPEECH=true ;;
     v) VISION=true ;;
+    J) JET=false ;;
     t) TELEOP=true ;;
     f) STATEMACHINE=true ;;
     g) GENIALE=true ;;
@@ -34,12 +36,13 @@ while getopts "asvhtfngzl:" opt; do
         echo ' Sara_total_bringup [options]'
         echo 'OPTIONS:'
         echo ' -a  activate all options'
-        echo ' -h  show this help message'
+        echo ' -g  geniale node'
         echo ' -f  activate flexbe state machine engine'
+        echo ' -h  show this help message'
+        echo ' -J  do not use the jetson'
         echo ' -n  activate autonaumous navigation'
         echo ' -s  activate speech to text'
         echo ' -t  activate teleoperation'
-        echo ' -g  geniale node'
         echo ' -v  activate vision stack'
         echo ' -z  start rviz'
         HELP=true  ;;
@@ -94,15 +97,14 @@ then
         sleep 2
 
 
-
-
-        echo 'Starting jetson'
-        SARACMD="ssh -t -t nvidia@sara-jetson1 'cd /home/nvidia ; roslaunch sara_launch jetson.launch'"
-        SARACMD+='; echo -e "$(tput setaf 1)jetson just died$(tput setaf 7)$(tput setab 0)$(tput setaf 7)$(tput setab 0)" >> $(tty)'
-        SARACMD+='; echo -e "$(tput setaf 1)$(tput setab 7)Im dead"; sleep 20'
-        gnome-terminal --hide-menubar --profile=SARA
-
-
+        if ${JET}
+        then
+            echo 'Starting jetson'
+            SARACMD="ssh -t -t nvidia@sara-jetson1 'cd /home/nvidia ; roslaunch sara_launch jetson.launch'"
+            SARACMD+='; echo -e "$(tput setaf 1)jetson just died$(tput setaf 7)$(tput setab 0)$(tput setaf 7)$(tput setab 0)" >> $(tty)'
+            SARACMD+='; echo -e "$(tput setaf 1)$(tput setab 7)Im dead"; sleep 20'
+            gnome-terminal --hide-menubar --profile=SARA
+        fi
 
 
 #        echo 'Starting soundboard'
@@ -135,15 +137,6 @@ then
         SARACMD+='; echo -e "$(tput setaf 1)sara_bringup just died$(tput setaf 7)$(tput setab 0)$(tput setaf 7)$(tput setab 0)" >> $(tty)'
         SARACMD+='; echo -e "$(tput setaf 1)$(tput setab 7)Im dead"; sleep 20'
         gnome-terminal --hide-menubar --profile=SARA
-
-#
-#        echo 'Bringup the jetson'
-#        SARACMD='ssh nvidia@sara-jetson1 ; sleep 3'
-#        SARACMD+='; roslaunch sara_launch jetson.launch'
-#        SARACMD+='; echo -e "$(tput setaf 1)jetson just died$(tput setaf 7)$(tput setab 0)$(tput setaf 7)$(tput setab 0)" >> $(tty)'
-#        SARACMD+='; echo -e "$(tput setaf 1)$(tput setab 7)Im dead"; sleep 20'
-#        gnome-terminal --hide-menubar --profile=SARA
-
 
 
         echo 'Launching Wonderland'
