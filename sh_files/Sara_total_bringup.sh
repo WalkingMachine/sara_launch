@@ -87,8 +87,6 @@ then
         echo > tempPID
 
 
-
-
         echo 'Starting roscore'
         SARACMD+='roscore'
         SARACMD+='; echo -e "$(tput setaf 1)roscore just died$(tput setaf 7)$(tput setab 0)$(tput setaf 7)$(tput setab 0)" >> $(tty)'
@@ -96,11 +94,24 @@ then
         gnome-terminal --hide-menubar --profile=SARA
         sleep 2
 
+#        rosparam set use_sim_time true
+#        date --set="$ssh nvidia@sara-jetson1"
+
+        echo 'Bringup the hardware'
+        SARACMD='roslaunch sara_launch sara_bringup.launch'
+        SARACMD+='; echo -e "$(tput setaf 1)sara_bringup just died$(tput setaf 7)$(tput setab 0)$(tput setaf 7)$(tput setab 0)" >> $(tty)'
+        SARACMD+='; echo -e "$(tput setaf 1)$(tput setab 7)Im dead"; sleep 20'
+        gnome-terminal --hide-menubar --profile=SARA
+
+        sleep 1
+
 
         if ${JET}
         then
+
             echo 'Starting jetson'
-            SARACMD="ssh -t -t nvidia@sara-jetson1 'cd /home/nvidia ; roslaunch sara_launch jetson.launch'"
+            SARACMD='while [ ! $(ssh -t -t nvidia@sara-jetson1 "echo ok" ) ] ; do echo Still waiting for jetson ; sleep 1; done'
+            SARACMD+="; ssh -t -t nvidia@sara-jetson1 'cd /home/nvidia ; roslaunch sara_launch jetson.launch'"
             SARACMD+='; echo -e "$(tput setaf 1)jetson just died$(tput setaf 7)$(tput setab 0)$(tput setaf 7)$(tput setab 0)" >> $(tty)'
             SARACMD+='; echo -e "$(tput setaf 1)$(tput setab 7)Im dead"; sleep 20'
             gnome-terminal --hide-menubar --profile=SARA
@@ -131,13 +142,6 @@ then
 
         echo "Setting voice to $LANGUE"
         rosparam set /langue $LANGUE
-
-        echo 'Bringup the hardware'
-        SARACMD='roslaunch sara_launch sara_bringup.launch'
-        SARACMD+='; echo -e "$(tput setaf 1)sara_bringup just died$(tput setaf 7)$(tput setab 0)$(tput setaf 7)$(tput setab 0)" >> $(tty)'
-        SARACMD+='; echo -e "$(tput setaf 1)$(tput setab 7)Im dead"; sleep 20'
-        gnome-terminal --hide-menubar --profile=SARA
-
 
         echo 'Launching Wonderland'
         SARACMD='cd ~/sara_ws/wonderland/ ; python manage.py runserver'
@@ -205,6 +209,14 @@ then
             SARACMD+='; echo -e "$(tput setaf 1)$(tput setab 7)Im dead"; sleep 20'
             gnome-terminal --hide-menubar --profile=SARA
 
+
+            echo 'Launching face detector'
+            SARACMD='roslaunch ros_face_recognition webcam.launch'
+            SARACMD+='; echo -e "$(tput setaf 1)face_detector just died$(tput setaf 7)$(tput setab 0)$(tput setaf 7)$(tput setab 0)" >> $(tty)'
+            SARACMD+='; echo -e "$(tput setaf 1)$(tput setab 7)Im dead"; sleep 20'
+            gnome-terminal --hide-menubar --profile=SARA
+
+
             echo 'Launching data_collector'
             SARACMD='roslaunch wm_data_collector data_collector.launch'
             SARACMD+='; echo -e "$(tput setaf 1)wm_data_collector just died$(tput setaf 7)$(tput setab 0)$(tput setaf 7)$(tput setab 0)" >> $(tty)'
@@ -265,7 +277,8 @@ then
 
 
         echo "fully running"
-
+        echo "Open this link to open vizbox:"
+        echo "http://localhost:8888/"
 
         while [ -r /dev/dynamixel ] && [ -r /dev/robotiq ] && [ -r /dev/drive1 ] && [ -r /dev/kinova ]
         do
