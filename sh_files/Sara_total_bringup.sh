@@ -36,8 +36,7 @@ while getopts "asvhtfJngzl:" opt; do
         echo ' Sara_total_bringup [options]'
         echo 'OPTIONS:'
         echo ' -a  activate all options'
-        echo ' -g  geniale node'
-        echo ' -f  activate flexbe state machine engine'
+        echo ' -f  activate flexbe state machine widget'
         echo ' -h  show this help message'
         echo ' -J  do not use the jetson'
         echo ' -n  activate autonaumous navigation'
@@ -88,11 +87,15 @@ then
 
 
         echo 'Starting roscore'
-        SARACMD+='roscore'
+        SARACMD='roscore'
         SARACMD+='; echo -e "$(tput setaf 1)roscore just died$(tput setaf 7)$(tput setab 0)$(tput setaf 7)$(tput setab 0)" >> $(tty)'
         SARACMD+='; echo -e "$(tput setaf 1)$(tput setab 7)Im dead"; sleep 20'
         gnome-terminal --hide-menubar --profile=SARA
         sleep 2
+
+
+        echo "Setting voice to $LANGUE"
+        rosparam set /langue $LANGUE
 
 #        rosparam set use_sim_time true
 #        date --set="$ssh nvidia@sara-jetson1"
@@ -140,11 +143,9 @@ then
         gnome-terminal --hide-menubar --profile=SARA
 
 
-        echo "Setting voice to $LANGUE"
-        rosparam set /langue $LANGUE
 
         echo 'Launching Wonderland'
-        SARACMD='cd ~/sara_ws/wonderland/ ; python manage.py runserver'
+        SARACMD='cd ~/sara_ws/src/wonderland/ ; python manage.py runserver 0.0.0.0:8000'
         SARACMD+='; echo -e "$(tput setaf 1)wonderland just died$(tput setaf 7)$(tput setab 0)$(tput setaf 7)$(tput setab 0)" >> $(tty)'
         SARACMD+='; echo -e "$(tput setaf 1)$(tput setab 7)Im dead"; sleep 20'
         gnome-terminal --hide-menubar --profile=SARA
@@ -279,6 +280,8 @@ then
         echo "fully running"
         echo "Open this link to open vizbox:"
         echo "http://localhost:8888/"
+        echo "Or open this link to open wonderland:"
+        echo "http://wonderland:8000/admin/"
 
         while [ -r /dev/dynamixel ] && [ -r /dev/robotiq ] && [ -r /dev/drive1 ] && [ -r /dev/kinova ]
         do
