@@ -9,9 +9,10 @@ TELEOP=false
 NAV=false
 GENIALE=false
 RVIZ=false
+JET=true
 LANGUE="en-US"
 
-while getopts "asvhtfngzl:" opt; do
+while getopts "asvhtfJngzl:" opt; do
 
   case "$opt" in
     a)
@@ -24,6 +25,7 @@ while getopts "asvhtfngzl:" opt; do
     n) NAV=true ;;
     s) SPEECH=true ;;
     v) VISION=true ;;
+    J) JET=false ;;
     t) TELEOP=true ;;
     f) STATEMACHINE=true ;;
     g) GENIALE=true ;;
@@ -34,12 +36,12 @@ while getopts "asvhtfngzl:" opt; do
         echo ' Sara_total_bringup [options]'
         echo 'OPTIONS:'
         echo ' -a  activate all options'
+        echo ' -f  activate flexbe state machine widget'
         echo ' -h  show this help message'
-        echo ' -f  activate flexbe state machine engine'
+        echo ' -J  do not use the jetson'
         echo ' -n  activate autonaumous navigation'
         echo ' -s  activate speech to text'
         echo ' -t  activate teleoperation'
-        echo ' -g  geniale node'
         echo ' -v  activate vision stack'
         echo ' -z  start rviz'
         HELP=true  ;;
@@ -54,7 +56,7 @@ function cleanup {
     echo 'killing all processes'
     for f in $(cat ~/tempPID)
     do
-        kill -s 1 $f
+        kill -s 9 $f
     done
     echo > ~/tempPID
 }
@@ -84,13 +86,39 @@ then
         echo > tempPID
 
 
-
-
         echo 'Starting roscore'
         SARACMD='roscore'
         SARACMD+='; echo -e "$(tput setaf 1)roscore just died$(tput setaf 7)$(tput setab 0)$(tput setaf 7)$(tput setab 0)" >> $(tty)'
         SARACMD+='; echo -e "$(tput setaf 1)$(tput setab 7)Im dead"; sleep 20'
         gnome-terminal --hide-menubar --profile=SARA
+        sleep 2
+
+
+        echo "Setting voice to $LANGUE"
+        rosparam set /langue $LANGUE
+
+#        rosparam set use_sim_time true
+#        date --set="$ssh nvidia@sara-jetson1"
+
+        echo 'Bringup the hardware'
+        SARACMD='roslaunch sara_launch sara_bringup.launch'
+        SARACMD+='; echo -e "$(tput setaf 1)sara_bringup just died$(tput setaf 7)$(tput setab 0)$(tput setaf 7)$(tput setab 0)" >> $(tty)'
+        SARACMD+='; echo -e "$(tput setaf 1)$(tput setab 7)Im dead"; sleep 20'
+        gnome-terminal --hide-menubar --profile=SARA
+
+        sleep 1
+
+
+        if ${JET}
+        then
+
+            echo 'Starting jetson'
+            SARACMD='while [ ! $(ssh -t -t nvidia@sara-jetson1 "echo ok" ) ] ; do echo Still waiting for jetson ; sleep 1; done'
+            SARACMD+="; ssh -t -t nvidia@sara-jetson1 'cd /home/nvidia ; roslaunch sara_launch jetson.launch'"
+            SARACMD+='; echo -e "$(tput setaf 1)jetson just died$(tput setaf 7)$(tput setab 0)$(tput setaf 7)$(tput setab 0)" >> $(tty)'
+            SARACMD+='; echo -e "$(tput setaf 1)$(tput setab 7)Im dead"; sleep 20'
+            gnome-terminal --hide-menubar --profile=SARA
+        fi
 
 
 #        echo 'Starting soundboard'
@@ -98,7 +126,6 @@ then
 #        SARACMD+='; echo -e "$(tput setaf 1)soundboard just died$(tput setaf 7)$(tput setab 0)$(tput setaf 7)$(tput setab 0)" >> $(tty)'
 #        SARACMD+='; echo -e "$(tput setaf 1)$(tput setab 7)Im dead"; sleep 20'
 #        gnome-terminal --hide-menubar --profile=SARA
-
 
 
 
@@ -116,17 +143,9 @@ then
         gnome-terminal --hide-menubar --profile=SARA
 
 
-        echo "Setting voice to $LANGUE"
-        rosparam set /langue $LANGUE
-
-        echo 'Bringup the hardware'
-        SARACMD='roslaunch sara_launch sara_bringup.launch'
-        SARACMD+='; echo -e "$(tput setaf 1)sara_bringup just died$(tput setaf 7)$(tput setab 0)$(tput setaf 7)$(tput setab 0)" >> $(tty)'
-        SARACMD+='; echo -e "$(tput setaf 1)$(tput setab 7)Im dead"; sleep 20'
-        gnome-terminal --hide-menubar --profile=SARA
 
         echo 'Launching Wonderland'
-        SARACMD='cd ~/sara_ws/wonderland/ ; python manage.py runserver'
+        SARACMD='cd ~/sara_ws/src/wonderland/ ; python manage.py runserver 0.0.0.0:8000'
         SARACMD+='; echo -e "$(tput setaf 1)wonderland just died$(tput setaf 7)$(tput setab 0)$(tput setaf 7)$(tput setab 0)" >> $(tty)'
         SARACMD+='; echo -e "$(tput setaf 1)$(tput setab 7)Im dead"; sleep 20'
         gnome-terminal --hide-menubar --profile=SARA
@@ -173,11 +192,11 @@ then
 
         if ${VISION}
         then
-            echo 'Launching darknet'
-            SARACMD='roslaunch darknet_ros darknet_ros.launch'
-            SARACMD+='; echo -e "$(tput setaf 1)darknet just died$(tput setaf 7)$(tput setab 0)$(tput setaf 7)$(tput setab 0)" >> $(tty)'
-            SARACMD+='; echo -e "$(tput setaf 1)$(tput setab 7)Im dead"; sleep 20'
-            gnome-terminal --hide-menubar --profile=SARA
+#            echo 'Launching darknet'
+#            SARACMD='roslaunch darknet_ros darknet_ros.launch'
+#            SARACMD+='; echo -e "$(tput setaf 1)darknet just died$(tput setaf 7)$(tput setab 0)$(tput setaf 7)$(tput setab 0)" >> $(tty)'
+#            SARACMD+='; echo -e "$(tput setaf 1)$(tput setab 7)Im dead"; sleep 20'
+#            gnome-terminal --hide-menubar --profile=SARA
 
             echo 'Launching frame to box'
             SARACMD='roslaunch wm_frame_to_box wm_frame_to_box.launch'
@@ -190,6 +209,14 @@ then
             SARACMD+='; echo -e "$(tput setaf 1)color_detector just died$(tput setaf 7)$(tput setab 0)$(tput setaf 7)$(tput setab 0)" >> $(tty)'
             SARACMD+='; echo -e "$(tput setaf 1)$(tput setab 7)Im dead"; sleep 20'
             gnome-terminal --hide-menubar --profile=SARA
+
+
+            echo 'Launching face detector'
+            SARACMD='roslaunch ros_face_recognition webcam.launch'
+            SARACMD+='; echo -e "$(tput setaf 1)face_detector just died$(tput setaf 7)$(tput setab 0)$(tput setaf 7)$(tput setab 0)" >> $(tty)'
+            SARACMD+='; echo -e "$(tput setaf 1)$(tput setab 7)Im dead"; sleep 20'
+            gnome-terminal --hide-menubar --profile=SARA
+
 
             echo 'Launching data_collector'
             SARACMD='roslaunch wm_data_collector data_collector.launch'
@@ -251,7 +278,10 @@ then
 
 
         echo "fully running"
-
+        echo "Open this link to open vizbox:"
+        echo "http://localhost:8888/"
+        echo "Or open this link to open wonderland:"
+        echo "http://wonderland:8000/admin/"
 
         while [ -r /dev/dynamixel ] && [ -r /dev/robotiq ] && [ -r /dev/drive1 ] && [ -r /dev/kinova ]
         do

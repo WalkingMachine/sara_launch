@@ -1,10 +1,5 @@
 <launch>
 
-    <!-- set arguments -->
-        <arg name="base_xtion" default="base_xtion" />
-        <arg name="head_xtion" default="head_xtion" />
-        <arg name="arm_xtion" default="arm_xtion" />
-
 
     <!-- start robot description -->
         <include file="$(find sara_description)/launch/sara_description.launch"/>
@@ -20,7 +15,6 @@
         <include file="$(find wm_mecanum_cmd)/launch/wm_mecanum_auto.launch"/>
         <include file="$(find wm_odometry_feedback)/launch/wm_odometry_feedback.launch"/>
         <include file="$(find sara_moveit)/launch/move_group.launch"/>
-        <include file="$(find wm_moveit_server)/launch/moveit_server.launch"/>
 
     <!-- start trajectory manager -->
         <include file="$(find wm_trajectory_manager)/launch/trajectory_manager.launch"/>
@@ -34,11 +28,6 @@
 
     <!-- start leg detector and peoplefollower node -->
         <include file="$(find sara_launch)/launch/people_launch/wm_leg_detector.launch"/>
-
-    <!-- start all cameras -->
-        <include file="$(find sara_launch)/launch/openni2/wm_openni2.launch" >
-            <arg name="camera" value="$(arg head_xtion)" />
-        </include>
 
     <!-- launch speech related nodes -->
         <include file="$(find wm_tts)/launch/wm_tts.launch"/>
