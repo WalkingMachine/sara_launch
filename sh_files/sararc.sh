@@ -8,9 +8,15 @@ alias JETSON='ssh nvidia@sara-jetson1'
 
 # Alias de WM
 alias NEWICON='gnome-desktop-item-edit --create-new ~/LauncherIcons ; nautilus ~/LauncherIcons'
-alias BASHRC='atom ~/.bashrc 2> /dev/null'
 alias CATKIN_MAKE='cd ~/sara_ws; catkin_make; cd -'
-alias SOURCEBASHRC='source ~/.bashrc'
+
+if [ -n "$ZSH_VERSION" ]; then
+    alias SOURCERC='source ~/.zshrc'
+    alias RC='atom ~/.zshrc 2> /dev/null'
+elif [ -n "$BASH_VERSION" ]; then
+    alias SOURCERC='source ~/.bashrc'
+    alias RC='atom ~/.bashrc 2> /dev/null'
+fi
 
 export PATH=/usr/local/cuda-8.0/bin${PATH:+:${PATH}}
 export LD_LIBRARY_PATH=/usr/local/cuda-8.0/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
@@ -18,13 +24,18 @@ export LD_LIBRARY_PATH=/usr/local/cuda-8.0/lib${LD_LIBRARY_PATH:+:${LD_LIBRARY_P
 export OPENPOSE_HOME=~/openpose
 
 # ros related sourcing
-source /opt/ros/kinetic/setup.bash
-source ~/sara_ws/devel/setup.bash
+if [ -n "$ZSH_VERSION" ]; then
+    source /opt/ros/kinetic/setup.zsh
+    source ~/sara_ws/devel/setup.zsh
+elif [ -n "$BASH_VERSION" ]; then
+    source /opt/ros/kinetic/setup.bash
+    source ~/sara_ws/devel/setup.bash
+fi
 
 #IP of roscore in the local router
 # export ROS_IP=192.168.0.250
 # export ROS_MASTER_URI=http://192.168.0.250:11311/
 
-. /home/walking/torch/install/bin/torch-activate
+# . /home/walking/torch/install/bin/torch-activate
 
 export GOOGLE_APPLICATION_CREDENTIALS="/home/walking/project.json"
