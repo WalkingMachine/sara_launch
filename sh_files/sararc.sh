@@ -36,6 +36,6 @@ fi
 # export ROS_IP=192.168.0.250
 # export ROS_MASTER_URI=http://192.168.0.250:11311/
 
-. /home/walking/torch/install/bin/torch-activate
+# . /home/walking/torch/install/bin/torch-activate
 
 export GOOGLE_APPLICATION_CREDENTIALS="/home/walking/project.json"
