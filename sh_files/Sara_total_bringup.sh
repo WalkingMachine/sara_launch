@@ -113,7 +113,7 @@ then
         then
 
             echo 'Starting jetson'
-            SARACMD='while [ ! $(ssh -t -t nvidia@sara-jetson1 "echo ok" ) ] ; do echo Still waiting for jetson ; sleep 1; done'
+            SARACMD='while [ ! $(ssh -t -t nvidia@sara-jetson1 "echo ok" ) ] ; do echo $(tput setaf 3)Still waiting for jetson$(tput setaf 7) ; sleep 1; done'
             SARACMD+="; ssh -t -t nvidia@sara-jetson1 'cd /home/nvidia ; roslaunch sara_launch jetson.launch'"
             SARACMD+='; echo -e "$(tput setaf 1)jetson just died$(tput setaf 7)$(tput setab 0)$(tput setaf 7)$(tput setab 0)" >> $(tty)'
             SARACMD+='; echo -e "$(tput setaf 1)$(tput setab 7)Im dead"; sleep 20'
@@ -150,6 +150,12 @@ then
         SARACMD+='; echo -e "$(tput setaf 1)$(tput setab 7)Im dead"; sleep 20'
         gnome-terminal --hide-menubar --profile=SARA
 
+
+        echo 'Launching NLU'
+        SARACMD='roslaunch wm_nlu wm_nlu.launch'
+        SARACMD+='; echo -e "$(tput setaf 1)wm_nlu just died$(tput setaf 7)$(tput setab 0)$(tput setaf 7)$(tput setab 0)" >> $(tty)'
+        SARACMD+='; echo -e "$(tput setaf 1)$(tput setab 7)Im dead"; sleep 20'
+        gnome-terminal --hide-menubar --profile=SARA
 
 
         echo 'Launching flexbe core'
@@ -212,7 +218,7 @@ then
 
 
             echo 'Launching face detector'
-            SARACMD='roslaunch ros_face_recognition webcam.launch'
+            SARACMD='roslaunch ros_face_recognition ros-face-recognition.launch'
             SARACMD+='; echo -e "$(tput setaf 1)face_detector just died$(tput setaf 7)$(tput setab 0)$(tput setaf 7)$(tput setab 0)" >> $(tty)'
             SARACMD+='; echo -e "$(tput setaf 1)$(tput setab 7)Im dead"; sleep 20'
             gnome-terminal --hide-menubar --profile=SARA
