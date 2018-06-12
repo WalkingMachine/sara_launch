@@ -1,0 +1,24 @@
+fruit:
+        - apple
+        - banana
+        - orange
+        - grape
+        - kiwi
+
+vegetable:
+        - tomato
+        - cucumber
+        - carrot
+
+drink:
+        - juice
+        - coke
+        - pepsi
+        - Dr. Pepper
+        - water
+
+shape:
+        - sphere
+        - ball
+        - cube
+        - pyramide
