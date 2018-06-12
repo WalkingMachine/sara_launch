@@ -97,7 +97,7 @@ then
 
 
 	echo "Load categoryToNames.yaml"
-	rosparam load ~/sara_ws/src/sara_launch/ressources/categoryToNames.yaml CategoryToNames
+	rosparam load ~/sara_ws/src/sara_launch/sh_files/ressources/categoryToNames.yaml CategoryToNames
 
 
 
