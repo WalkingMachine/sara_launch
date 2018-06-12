@@ -96,6 +96,11 @@ then
         sleep 2
 
 
+	echo "Load categoryToNames.yaml"
+	rosparam load ~/sara_ws/src/sara_launch/ressources/categoryToNames.yaml CategoryToNames
+
+
+
         echo "Setting voice to $LANGUE"
         rosparam set /langue $LANGUE
 
