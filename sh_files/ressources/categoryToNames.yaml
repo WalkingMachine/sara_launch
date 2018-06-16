@@ -1,0 +1,29 @@
+categoryToNames:
+        fruit : food
+        apple : fruit
+        banana : fruit
+        orange : fruit
+        grape : fruit
+        kiwi : fruit
+
+        vegetable : food
+        tomato : vegetable
+        cucumber : vegetable
+        carrot : vegetable
+
+        drink : food
+        juice : drink
+        coke : drink
+        pepsi : drink
+        Dr.Pepper : drink
+        water : drink
+
+        #:shape
+        sphere : shape
+        ball : shape
+        cube : shape
+        pyramide : shape
+
+        person : mob
+
+

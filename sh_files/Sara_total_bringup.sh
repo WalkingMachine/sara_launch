@@ -10,9 +10,11 @@ NAV=false
 GENIALE=false
 RVIZ=false
 JET=true
+MAPPING=false
+
 LANGUE="en-US"
 
-while getopts "asvhtfJngzl:" opt; do
+while getopts "asvhtfJngzl:m" opt; do
 
   case "$opt" in
     a)
@@ -23,6 +25,7 @@ while getopts "asvhtfJngzl:" opt; do
         RVIZ=true
         JET=true
         STATEMACHINE=true ;;
+    m) MAPPING=true ;;
     n) NAV=true ;;
     s) SPEECH=true ;;
     v) VISION=true ;;
@@ -80,7 +83,7 @@ then
 
 
         echo 'waiting for power'
-        while [ ! -r /dev/dynamixel ] || [ ! -r /dev/robotiq ] || [ ! -r /dev/drive1 ] || [ ! -r /dev/kinova  ]
+        while [ ! -r /dev/dynamixel ] || [ ! -r /dev/robotiq ] || [ ! -r /dev/kinova  ] || $( [ ! -r /dev/drive1 ] && [ ! -r /dev/drive3 ] )
         do
             sleep 1
         done
@@ -118,9 +121,7 @@ then
             echo 'Starting jetson'
             SARACMD='( while true ; do setTitle JETSON ; sleep 2 ; done )'
             SARACMD+='& while [ ! $(ssh -t -t nvidia@sara-jetson1 "echo ok" ) ] ; do echo $(tput setaf 3)Still waiting for jetson$(tput setaf 7) ; sleep 1; done'
-            SARACMD+="; ssh -t -t nvidia@sara-jetson1 'sudo service ntp stop'"
-            SARACMD+="; sleep 1"
-            SARACMD+="; ssh -t -t nvidia@sara-jetson1 'sudo ntpd -gq'"
+            SARACMD+="; ssh -t -t nvidia@sara-jetson1 'sudo service ntp stop; sudo ntpd -gq'"
             SARACMD+="; ssh -t -t nvidia@sara-jetson1 'cd /home/nvidia ; roslaunch sara_launch jetson.launch'"
             SARACMD+='; echo -e "$(tput setaf 1)jetson just died$(tput setaf 7)$(tput setab 0)$(tput setaf 7)$(tput setab 0)" >> $(tty)'
             SARACMD+='; echo -e "$(tput setaf 1)$(tput setab 7)Im dead"'
@@ -157,6 +158,11 @@ then
         SARACMD='( while true ; do setTitle WONDERLAND ; sleep 2 ; done )'
         SARACMD+='& cd ~/sara_ws/src/wonderland/ ; python manage.py runserver 0.0.0.0:8000'
         SARACMD+='; echo -e "$(tput setaf 1)wonderland just died$(tput setaf 7)$(tput setab 0)$(tput setaf 7)$(tput setab 0)" >> $(tty)'
+        SARACMD+='; echo -e "$(tput setaf 1)$(tput setab 7)Im dead"'
+        gnome-terminal --hide-menubar --profile=SARA
+        SARACMD='( while true ; do setTitle WONDERLAND_PUBLISHER ; sleep 2 ; done )'
+        SARACMD+='& rosrun wonderland publish_objects_3D.py'
+        SARACMD+='; echo -e "$(tput setaf 1)wonderland publisher just died$(tput setaf 7)$(tput setab 0)$(tput setaf 7)$(tput setab 0)" >> $(tty)'
         SARACMD+='; echo -e "$(tput setaf 1)$(tput setab 7)Im dead"'
         gnome-terminal --hide-menubar --profile=SARA
 
@@ -207,11 +213,11 @@ then
 
         if ${VISION}
         then
-#            echo 'Launching darknet'
-#            SARACMD='roslaunch darknet_ros darknet_ros.launch'
-#            SARACMD+='; echo -e "$(tput setaf 1)darknet just died$(tput setaf 7)$(tput setab 0)$(tput setaf 7)$(tput setab 0)" >> $(tty)'
-#            SARACMD+='; echo -e "$(tput setaf 1)$(tput setab 7)Im dead"'
-#            gnome-terminal --hide-menubar --profile=SARA
+            echo 'Launching local darknet'
+            SARACMD='roslaunch darknet_ros darknet_ros.launch'
+            SARACMD+='; echo -e "$(tput setaf 1)darknet just died$(tput setaf 7)$(tput setab 0)$(tput setaf 7)$(tput setab 0)" >> $(tty)'
+            SARACMD+='; echo -e "$(tput setaf 1)$(tput setab 7)Im dead"'
+            gnome-terminal --hide-menubar --profile=SARA
 
             echo 'Launching frame to box'
             SARACMD='( while true ; do setTitle FRAME_TO_BOX ; sleep 2 ; done )'
@@ -244,12 +250,23 @@ then
             gnome-terminal --hide-menubar --profile=SARA
         fi
 
-        if ${NAV}
+        if ${NAV}  && ! ${MAPPING}
         then
             echo 'Launching navigation'
             SARACMD='( while true ; do setTitle NAVIGATION ; sleep 2 ; done )'
             SARACMD+='& roslaunch sara_navigation move_base_amcl.launch'
             SARACMD+='; echo -e "$(tput setaf 1)move_base just died$(tput setaf 7)$(tput setab 0)$(tput setaf 7)$(tput setab 0)" >> $(tty)'
+            SARACMD+='; echo -e "$(tput setaf 1)$(tput setab 7)Im dead"'
+            gnome-terminal --hide-menubar --profile=SARA
+
+        fi
+
+        if ${MAPPING}
+        then
+            echo 'Launching SLAM navigation'
+            SARACMD='( while true ; do setTitle SLAM ; sleep 2 ; done )'
+            SARACMD+='& roslaunch sara_launch wm_slam_gmapping.launch'
+            SARACMD+='; echo -e "$(tput setaf 1)SLAM just died$(tput setaf 7)$(tput setab 0)$(tput setaf 7)$(tput setab 0)" >> $(tty)'
             SARACMD+='; echo -e "$(tput setaf 1)$(tput setab 7)Im dead"'
             gnome-terminal --hide-menubar --profile=SARA
 
@@ -296,7 +313,7 @@ then
         echo "Or open this link to open wonderland:"
         echo "http://wonderland:8000/admin/"
 
-        while [ -r /dev/dynamixel ] && [ -r /dev/robotiq ] && [ -r /dev/drive1 ] && [ -r /dev/kinova ]
+        while ! $( [ ! -r /dev/dynamixel ] || [ ! -r /dev/robotiq ] || [ ! -r /dev/drive1 ] && [ ! -r /dev/drive3 ] || [ ! -r /dev/kinova  ] )
         do
             sleep 1
         done
@@ -307,4 +324,3 @@ then
     done
 
 fi
-
