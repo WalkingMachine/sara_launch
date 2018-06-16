@@ -36,10 +36,10 @@ categoryToNames:
         sponge : cleaning stuff         
         basket : containers         
         tray : containers                       
-        chocolate drink : drinks   
+        chocolate_drink : drinks   
         coke : drinks          
-        grape juice : drinks          
-        orange juice : drinks          
+        grape_juice : drinks          
+        orange_juice : drinks          
         sprite : drinks         
         cereal : food                 
         noodles : food            
