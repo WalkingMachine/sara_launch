@@ -1,11 +1,3 @@
-# Alias de Sara
-alias FLEXBE='roslaunch flexbe_onboard behavior_onboard.launch'
-alias FLEXBEWIDGET='roslaunch flexbe_widget behavior_ocs.launch'
-alias FLEXBERUNBEHAVIOR='rosrun flexbe_widget be_launcher -b'
-alias START_SARA='~/sara_ws/src/sara_launch/sh_files/Sara_total_bringup.sh'
-alias TELEOP='roslaunch sara_teleop sara_teleop.launch'
-alias JETSON='ssh nvidia@sara-jetson1'
-
 # Alias de WM
 alias NEWICON='gnome-desktop-item-edit --create-new ~/LauncherIcons ; nautilus ~/LauncherIcons'
 alias CATKIN_MAKE='cd ~/sara_ws; catkin_make; cd -'
@@ -17,6 +9,16 @@ elif [ -n "$BASH_VERSION" ]; then
     alias SOURCERC='source ~/.bashrc'
     alias RC='atom ~/.bashrc 2> /dev/null'
 fi
+
+alias SARARC='atom ~/sara_ws/src/sara_launch/sh_files/sararc.sh 2> /dev/null'
+
+# Alias de Sara
+alias FLEXBE='SOURCERC; roslaunch flexbe_onboard behavior_onboard.launch'
+alias FLEXBEWIDGET='SOURCERC; roslaunch flexbe_widget behavior_ocs.launch'
+alias FLEXBERUNBEHAVIOR='SOURCERC; rosrun flexbe_widget be_launcher -b'
+alias START_SARA='SOURCERC; ~/sara_ws/src/sara_launch/sh_files/Sara_total_bringup.sh'
+alias TELEOP='SOURCERC; roslaunch sara_teleop sara_teleop.launch'
+alias JETSON='ssh nvidia@sara-jetson1'
 
 export PATH=/usr/local/cuda-8.0/bin${PATH:+:${PATH}}
 export LD_LIBRARY_PATH=/usr/local/cuda-8.0/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
