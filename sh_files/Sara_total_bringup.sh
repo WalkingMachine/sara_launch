@@ -11,10 +11,11 @@ GENIALE=false
 RVIZ=false
 JET=true
 MAPPING=false
+FORCEOFFLINE=false
 
 LANGUE="en-US"
 
-while getopts "asvhtfJngzl:m" opt; do
+while getopts "asvhtfJngzl:mo" opt; do
 
   case "$opt" in
     a)
@@ -30,6 +31,7 @@ while getopts "asvhtfJngzl:m" opt; do
     s) SPEECH=true ;;
     v) VISION=true ;;
     J) JET=false ;;
+    o) FORCEOFFLINE=true ;;
     t) TELEOP=true ;;
     f) STATEMACHINE=true ;;
     g) GENIALE=true ;;
@@ -44,6 +46,7 @@ while getopts "asvhtfJngzl:m" opt; do
         echo ' -h  show this help message'
         echo ' -J  do not use the jetson'
         echo ' -n  activate autonaumous navigation'
+        echo ' -o  force the tts to offline mode'
         echo ' -s  activate speech to text'
         echo ' -t  activate teleoperation'
         echo ' -v  activate vision stack'
@@ -99,8 +102,15 @@ then
         sleep 2
 
 
-	echo "Load categoryToNames.yaml"
-	rosparam load ~/sara_ws/src/sara_launch/sh_files/ressources/categoryToNames.yaml CategoryToNames
+        if ${FORCEOFFLINE}
+            then
+            rosparam set /force_offline true
+        fi
+
+
+
+        echo "Load categoryToNames.yaml"
+        rosparam load ~/sara_ws/src/sara_launch/sh_files/ressources/categoryToNames.yaml CategoryToNames
 
 
 
@@ -109,6 +119,17 @@ then
 
 #        rosparam set use_sim_time true
 #        date --set="$ssh nvidia@sara-jetson1"
+
+
+
+        echo 'Starting mary_tts'
+        SARACMD='( while true ; do setTitle Mary_tts ; sleep 2 ; done )'
+        SARACMD+='& ~/sara_ws/src/marytts/gradlew run'
+        SARACMD+='; echo -e "$(tput setaf 1)mary_tts just died$(tput setaf 7)$(tput setab 0)$(tput setaf 7)$(tput setab 0)" >> $(tty)'
+        SARACMD+='; echo -e "$(tput setaf 1)$(tput setab 7)Im dead"'
+        gnome-terminal --hide-menubar --profile=SARA
+
+
 
         echo 'Bringup the hardware'
         SARACMD='( while true ; do setTitle SARA_BRINGUP ; sleep 2 ; done )'
