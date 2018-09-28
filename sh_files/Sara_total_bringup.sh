@@ -124,7 +124,7 @@ then
 
         echo 'Starting mary_tts'
         SARACMD='( while true ; do setTitle Mary_tts ; sleep 2 ; done )'
-        SARACMD+='& ~/sara_ws/src/marytts/gradlew run'
+        SARACMD+='& cd ~/sara_ws/src/marytts ; ./gradlew run'
         SARACMD+='; echo -e "$(tput setaf 1)mary_tts just died$(tput setaf 7)$(tput setab 0)$(tput setaf 7)$(tput setab 0)" >> $(tty)'
         SARACMD+='; echo -e "$(tput setaf 1)$(tput setab 7)Im dead"'
         gnome-terminal --hide-menubar --profile=SARA
