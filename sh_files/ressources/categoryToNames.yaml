@@ -1,54 +1,54 @@
 categoryToNames:
-         fruit : food
-         fruits : food
-#        apple : fruits
-         banana : fruits
-         orange : fruits
-         grape : fruits
-         kiwi : fruits
- 
-         vegetable : food
-         tomato : vegetable
-         cucumber : vegetable
-         carrot : vegetable
- 
-         drink : food
-         drinks : food
-         juice : drinks
-#        coke : drinks
-         pepsi : drinks
-         Dr.Pepper : drinks
-         water : drinks
- 
-         shape : object
-         sphere : shape
-         ball : shape
-         cube : shape
-         pyramide : shape
- 
-         person : creature
-       
-        snacks : food
-        #ROBOCUP 2018
-        bag : additional                                
-        cloth : cleaning stuff                  
-        scrubby : cleaning stuff           
-        sponge : cleaning stuff         
-        basket : containers         
-        tray : containers                       
-        chocolate_drink : drinks   
-        coke : drinks          
-        grape_juice : drinks          
-        orange_juice : drinks          
-        sprite : drinks         
-        cereal : food                 
-        noodles : food            
-        sausages : food            
-        apple : fruits          
-        orange : fruits                 
-        paprika : fruits          
-        crackers : snacks          
-        potato chips : snacks
-        pringles : snacks
+  fruit : food
+  fruits : food
+  #        apple : fruits
+  banana : fruits
+  orange : fruits
+  grape : fruits
+  kiwi : fruits
+
+  vegetable : food
+  tomato : vegetable
+  cucumber : vegetable
+  carrot : vegetable
+
+  drink : food
+  drinks : food
+  juice : drinks
+  #        coke : drinks
+  pepsi : drinks
+  Dr.Pepper : drinks
+  water : drinks
+
+  shape : object
+  sphere : shape
+  ball : shape
+  cube : shape
+  pyramide : shape
+
+  person : creature
+
+  snacks : food
+  #ROBOCUP 2018
+  bag : additional
+  cloth : cleaning stuff
+  scrubby : cleaning stuff
+  sponge : cleaning stuff
+  basket : containers
+  tray : containers
+  chocolate_drink : drinks
+  coke : drinks
+  grape_juice : drinks
+  orange_juice : drinks
+  sprite : drinks
+  cereal : food
+  noodles : food
+  sausages : food
+  apple : fruits
+  orange : fruits
+  paprika : fruits
+  crackers : snacks
+  potato chips : snacks
+  pringles : snacks
 
 
