@@ -29,10 +29,6 @@
     <!-- start leg detector and peoplefollower node -->
         <include file="$(find sara_launch)/launch/people_launch/wm_leg_detector.launch"/>
 
-    <!-- launch speech related nodes -->
-        <include file="$(find wm_tts)/launch/wm_tts.launch"/>
-        <include file="$(find wm_sound_library)/launch/wm_soundboard.launch"/>
-
     <!-- start the face node -->
         <include file="$(find sara_launch)/launch/face/sara_face.launch" />
 
