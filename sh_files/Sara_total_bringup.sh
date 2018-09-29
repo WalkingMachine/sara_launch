@@ -11,7 +11,7 @@ GENIALE=false
 RVIZ=false
 JET=true
 MAPPING=false
-FORCEOFFLINE=false
+FORCEOFFLINE=true
 
 LANGUE="en-US"
 
@@ -31,7 +31,7 @@ while getopts "asvhtfJngzl:mo" opt; do
     s) SPEECH=true ;;
     v) VISION=true ;;
     J) JET=false ;;
-    o) FORCEOFFLINE=true ;;
+    o) FORCEOFFLINE=false ;;
     t) TELEOP=true ;;
     f) STATEMACHINE=true ;;
     g) GENIALE=true ;;
@@ -46,7 +46,7 @@ while getopts "asvhtfJngzl:mo" opt; do
         echo ' -h  show this help message'
         echo ' -J  do not use the jetson'
         echo ' -n  activate autonaumous navigation'
-        echo ' -o  force the tts to offline mode'
+        echo ' -o  use the tts in online mode'
         echo ' -s  activate speech to text'
         echo ' -t  activate teleoperation'
         echo ' -v  activate vision stack'
@@ -70,12 +70,19 @@ function cleanup {
 trap cleanup EXIT
 
 
-
+function start_terminal_node {
+    Name=$1
+    Command=$2
+    echo "Starting $Name"
+    SARACMD='( while true ; do setTitle '"$Name"' ; sleep 2 ; done ) & '
+    SARACMD+=$Command
+    SARACMD+='; echo -e "$(tput setaf 1)'"$Name"' just died$(tput setaf 7)$(tput setab 0)$(tput setaf 7)$(tput setab 0)" >> $(tty)'
+    SARACMD+='; echo -e "$(tput setaf 1)$(tput setab 7)Im dead"'
+    gnome-terminal --hide-menubar --profile=SARA
+}
 
 # Export the variable that will contain the command for each orbital terminals
 export SARACMD
-
-
 
 if ! $HELP
 then
@@ -83,8 +90,6 @@ then
     # Loop forever
     while true
     do
-
-
         echo 'waiting for power'
         while [ ! -r /dev/dynamixel ] || [ ! -r /dev/robotiq ] || [ ! -r /dev/kinova  ] || $( [ ! -r /dev/drive1 ] && [ ! -r /dev/drive3 ] )
         do
@@ -92,27 +97,17 @@ then
         done
         echo > tempPID
 
+        start_terminal_node "roscore" "roscore"
 
-        echo 'Starting roscore'
-        SARACMD='( while true ; do setTitle ROSCORE ; sleep 2 ; done )'
-        SARACMD+='& roscore'
-        SARACMD+='; echo -e "$(tput setaf 1)roscore just died$(tput setaf 7)$(tput setab 0)$(tput setaf 7)$(tput setab 0)" >> $(tty)'
-        SARACMD+='; echo -e "$(tput setaf 1)$(tput setab 7)Im dead"'
-        gnome-terminal --hide-menubar --profile=SARA
-        sleep 2
-
+        sleep 3
 
         if ${FORCEOFFLINE}
             then
             rosparam set /force_offline true
         fi
 
-
-
         echo "Load categoryToNames.yaml"
         rosparam load ~/sara_ws/src/sara_launch/sh_files/ressources/categoryToNames.yaml CategoryToNames
-
-
 
         echo "Setting voice to $LANGUE"
         rosparam set /langue $LANGUE
@@ -120,216 +115,85 @@ then
 #        rosparam set use_sim_time true
 #        date --set="$ssh nvidia@sara-jetson1"
 
+        start_terminal_node "MARY_TTS" "cd ~/sara_ws/src/marytts ; ./gradlew run"
 
-
-        echo 'Starting mary_tts'
-        SARACMD='( while true ; do setTitle Mary_tts ; sleep 2 ; done )'
-        SARACMD+='& cd ~/sara_ws/src/marytts ; ./gradlew run'
-        SARACMD+='; echo -e "$(tput setaf 1)mary_tts just died$(tput setaf 7)$(tput setab 0)$(tput setaf 7)$(tput setab 0)" >> $(tty)'
-        SARACMD+='; echo -e "$(tput setaf 1)$(tput setab 7)Im dead"'
-        gnome-terminal --hide-menubar --profile=SARA
-
-
-
-        echo 'Bringup the hardware'
-        SARACMD='( while true ; do setTitle SARA_BRINGUP ; sleep 2 ; done )'
-        SARACMD+='& roslaunch sara_launch sara_bringup.launch'
-        SARACMD+='; echo -e "$(tput setaf 1)sara_bringup just died$(tput setaf 7)$(tput setab 0)$(tput setaf 7)$(tput setab 0)" >> $(tty)'
-        SARACMD+='; echo -e "$(tput setaf 1)$(tput setab 7)Im dead"'
-        gnome-terminal --hide-menubar --profile=SARA
+        start_terminal_node "SARA_HARDWARE" 'roslaunch sara_launch sara_bringup.launch'
 
         sleep 1
 
+        start_terminal_node "WM_TTS" 'roslaunch wm_tts wm_tts.launch'
 
         if ${JET}
         then
-
-            echo 'Starting jetson'
-            SARACMD='( while true ; do setTitle JETSON ; sleep 2 ; done )'
-            SARACMD+='& while [ ! $(ssh -t -t nvidia@sara-jetson1 "echo ok" ) ] ; do echo $(tput setaf 3)Still waiting for jetson$(tput setaf 7) ; sleep 1; done'
-            SARACMD+="; ssh -t -t nvidia@sara-jetson1 'sudo service ntp stop; sudo ntpd -gq'"
-            SARACMD+="; ssh -t -t nvidia@sara-jetson1 'cd /home/nvidia ; roslaunch sara_launch jetson.launch'"
-            SARACMD+='; echo -e "$(tput setaf 1)jetson just died$(tput setaf 7)$(tput setab 0)$(tput setaf 7)$(tput setab 0)" >> $(tty)'
-            SARACMD+='; echo -e "$(tput setaf 1)$(tput setab 7)Im dead"'
-            gnome-terminal --hide-menubar --profile=SARA
+            COMMAND='while [ ! $(ssh -t -t nvidia@sara-jetson1 "echo ok" ) ] ; do echo $(tput setaf 3)Still waiting for jetson$(tput setaf 7) ; sleep 1; done'
+            COMMAND+="; ssh -t -t nvidia@sara-jetson1 'sudo service ntp stop; sudo ntpd -gq'"
+            COMMAND+="; ssh -t -t nvidia@sara-jetson1 'cd /home/nvidia ; roslaunch sara_launch jetson.launch'"
+            start_terminal_node "JETSON" "$COMMAND"
         fi
 
+#        start_terminal_node "SOUNDBOARD" ""
 
-#        echo 'Starting soundboard'
-#        echo ""
-#        SARACMD+='; echo -e "$(tput setaf 1)soundboard just died$(tput setaf 7)$(tput setab 0)$(tput setaf 7)$(tput setab 0)" >> $(tty)'
-#        SARACMD+='; echo -e "$(tput setaf 1)$(tput setab 7)Im dead"'
-#        gnome-terminal --hide-menubar --profile=SARA
-
-
-
-        echo 'Starting vizbox'
-        SARACMD='( while true ; do setTitle VIZBOX ; sleep 2 ; done )'
         VIZ=$(rospack find vizbox)
-        SARACMD+="& cd $VIZ ; ./server.py"
-        SARACMD+='; echo -e "$(tput setaf 1)vizbox just died$(tput setaf 7)$(tput setab 0)$(tput setaf 7)$(tput setab 0)" >> $(tty)'
-        SARACMD+='; echo -e "$(tput setaf 1)$(tput setab 7)Im dead"'
-        gnome-terminal --hide-menubar --profile=SARA
+        start_terminal_node "VIZBOX" "cd $VIZ ; ./server.py"
 
-        echo 'Launching ui helper'
-        SARACMD='( while true ; do setTitle UI_HELPER ; sleep 2 ; done )'
-        SARACMD+='& rosrun sara_ui sara_ui_helper'
-        SARACMD+='; echo -e "$(tput setaf 1)UI helper just died$(tput setaf 7)$(tput setab 0)$(tput setaf 7)$(tput setab 0)" >> $(tty)'
-        SARACMD+='; echo -e "$(tput setaf 1)$(tput setab 7)Im dead"'
-        gnome-terminal --hide-menubar --profile=SARA
+        start_terminal_node "UI_HELPER" 'rosrun sara_ui sara_ui_helper'
 
+        start_terminal_node "WONDERLAND" 'cd ~/sara_ws/src/wonderland/ ; python manage.py runserver 0.0.0.0:8000'
 
+        start_terminal_node "WONDERLAND_PUBLISHER" 'rosrun wonderland publish_objects_3D.py'
 
-        echo 'Launching Wonderland'
-        SARACMD='( while true ; do setTitle WONDERLAND ; sleep 2 ; done )'
-        SARACMD+='& cd ~/sara_ws/src/wonderland/ ; python manage.py runserver 0.0.0.0:8000'
-        SARACMD+='; echo -e "$(tput setaf 1)wonderland just died$(tput setaf 7)$(tput setab 0)$(tput setaf 7)$(tput setab 0)" >> $(tty)'
-        SARACMD+='; echo -e "$(tput setaf 1)$(tput setab 7)Im dead"'
-        gnome-terminal --hide-menubar --profile=SARA
-        SARACMD='( while true ; do setTitle WONDERLAND_PUBLISHER ; sleep 2 ; done )'
-        SARACMD+='& rosrun wonderland publish_objects_3D.py'
-        SARACMD+='; echo -e "$(tput setaf 1)wonderland publisher just died$(tput setaf 7)$(tput setab 0)$(tput setaf 7)$(tput setab 0)" >> $(tty)'
-        SARACMD+='; echo -e "$(tput setaf 1)$(tput setab 7)Im dead"'
-        gnome-terminal --hide-menubar --profile=SARA
+        start_terminal_node "SARA_NLU" 'roslaunch wm_nlu wm_nlu.launch'
 
+        start_terminal_node "FLEXBE_ENGINE" 'roslaunch flexbe_onboard behavior_onboard.launch'
 
-        echo 'Launching NLU'
-        SARACMD='( while true ; do setTitle RAZA_NLU ; sleep 2 ; done )'
-        SARACMD+='& roslaunch wm_nlu wm_nlu.launch'
-        SARACMD+='; echo -e "$(tput setaf 1)wm_nlu just died$(tput setaf 7)$(tput setab 0)$(tput setaf 7)$(tput setab 0)" >> $(tty)'
-        SARACMD+='; echo -e "$(tput setaf 1)$(tput setab 7)Im dead"'
-        gnome-terminal --hide-menubar --profile=SARA
-
-
-        echo 'Launching flexbe core'
-        SARACMD='( while true ; do setTitle FLEXBE_ENGINE ; sleep 2 ; done )'
-        SARACMD+='& roslaunch flexbe_onboard behavior_onboard.launch'
-        SARACMD+='; echo -e "$(tput setaf 1)flexbe just died$(tput setaf 7)$(tput setab 0)$(tput setaf 7)$(tput setab 0)" >> $(tty)'
-        SARACMD+='; echo -e "$(tput setaf 1)$(tput setab 7)Im dead"'
-        gnome-terminal --hide-menubar --profile=SARA
-
-        echo 'Launching direction to point service'
-        SARACMD='( while true ; do setTitle DIRECTION_TO_POINT ; sleep 2 ; done )'
-        SARACMD+='& rosrun wm_direction_to_point direction_to_point_server.py'
-        SARACMD+='; echo -e "$(tput setaf 1)direction to point just died$(tput setaf 7)$(tput setab 0)$(tput setaf 7)$(tput setab 0)" >> $(tty)'
-        SARACMD+='; echo -e "$(tput setaf 1)$(tput setab 7)Im dead"'
-        gnome-terminal --hide-menubar --profile=SARA
+        start_terminal_node "DTP_SERVICE" 'rosrun wm_direction_to_point direction_to_point_server.py'
 
         sleep 2
 
 
         if ${SPEECH}
         then
-            echo 'Launching google speech to text'
-            SARACMD='( while true ; do setTitle LAB_ROS_STT ; sleep 2 ; done )'
-            SARACMD+='& roslaunch lab_ros_speech_to_text google_tts.launch'
-            SARACMD+='; echo -e "$(tput setaf 1)lab_ros_stt just died$(tput setaf 7)$(tput setab 0)$(tput setaf 7)$(tput setab 0)" >> $(tty)'
-            SARACMD+='; echo -e "$(tput setaf 1)$(tput setab 7)Im dead"'
-            gnome-terminal --hide-menubar --profile=SARA
+            start_terminal_node "GOOGLE_STT" 'roslaunch lab_ros_speech_to_text google_tts.launch'
 
-
-            echo 'Launching speech splitter'
-            SARACMD='( while true ; do setTitle SPEECH_SPLITTER ; sleep 2 ; done )'
-            SARACMD+='& roslaunch wm_speech_splitter sara_speech.launch'
-            SARACMD+='; echo -e "$(tput setaf 1)Speech splitter just died$(tput setaf 7)$(tput setab 0)$(tput setaf 7)$(tput setab 0)" >> $(tty)'
-            SARACMD+='; echo -e "$(tput setaf 1)$(tput setab 7)Im dead"'
-            gnome-terminal --hide-menubar --profile=SARA
-
+            start_terminal_node "SPEECH_SPLITTER" 'roslaunch wm_speech_splitter sara_speech.launch'
         fi
 
         if ${VISION}
         then
-            echo 'Launching local darknet'
-            SARACMD='roslaunch darknet_ros darknet_ros.launch'
-            SARACMD+='; echo -e "$(tput setaf 1)darknet just died$(tput setaf 7)$(tput setab 0)$(tput setaf 7)$(tput setab 0)" >> $(tty)'
-            SARACMD+='; echo -e "$(tput setaf 1)$(tput setab 7)Im dead"'
-            gnome-terminal --hide-menubar --profile=SARA
+            start_terminal_node "FRAME_TO_BOX" 'roslaunch wm_frame_to_box wm_frame_to_box.launch'
 
-            echo 'Launching frame to box'
-            SARACMD='( while true ; do setTitle FRAME_TO_BOX ; sleep 2 ; done )'
-            SARACMD+='& roslaunch wm_frame_to_box wm_frame_to_box.launch'
-            SARACMD+='; echo -e "$(tput setaf 1)frame_to_box just died$(tput setaf 7)$(tput setab 0)$(tput setaf 7)$(tput setab 0)" >> $(tty)'
-            SARACMD+='; echo -e "$(tput setaf 1)$(tput setab 7)Im dead"'
-            gnome-terminal --hide-menubar --profile=SARA
+            start_terminal_node "COLOR_DETECTOR" 'roslaunch wm_color_detector wm_color_detector.launch'
 
-            echo 'Launching color detector'
-            SARACMD='( while true ; do setTitle COLOR_DETECTOR ; sleep 2 ; done )'
-            SARACMD+='& roslaunch wm_color_detector wm_color_detector.launch'
-            SARACMD+='; echo -e "$(tput setaf 1)color_detector just died$(tput setaf 7)$(tput setab 0)$(tput setaf 7)$(tput setab 0)" >> $(tty)'
-            SARACMD+='; echo -e "$(tput setaf 1)$(tput setab 7)Im dead"'
-            gnome-terminal --hide-menubar --profile=SARA
+            start_terminal_node "LAPTOP_DARKNET" 'roslaunch darknet_ros darknet_ros.launch'
 
+            start_terminal_node "FACE_DETECTOR" 'roslaunch ros_face_recognition ros-face-recognition.launch'
 
-            echo 'Launching face detector'
-            SARACMD='( while true ; do setTitle FACE_DETECTOR ; sleep 2 ; done )'
-            SARACMD+='& roslaunch ros_face_recognition ros-face-recognition.launch'
-            SARACMD+='; echo -e "$(tput setaf 1)face_detector just died$(tput setaf 7)$(tput setab 0)$(tput setaf 7)$(tput setab 0)" >> $(tty)'
-            SARACMD+='; echo -e "$(tput setaf 1)$(tput setab 7)Im dead"'
-            gnome-terminal --hide-menubar --profile=SARA
-
-
-            echo 'Launching data_collector'
-            SARACMD='( while true ; do setTitle DATA_COLLECTOR ; sleep 2 ; done )'
-            SARACMD+='& roslaunch wm_data_collector data_collector.launch'
-            SARACMD+='; echo -e "$(tput setaf 1)wm_data_collector just died$(tput setaf 7)$(tput setab 0)$(tput setaf 7)$(tput setab 0)" >> $(tty)'
-            SARACMD+='; echo -e "$(tput setaf 1)$(tput setab 7)Im dead"'
-            gnome-terminal --hide-menubar --profile=SARA
+            start_terminal_node "DATA_COLLECTOR" 'roslaunch wm_data_collector data_collector.launch'
         fi
 
         if ${NAV}  && ! ${MAPPING}
         then
-            echo 'Launching navigation'
-            SARACMD='( while true ; do setTitle NAVIGATION ; sleep 2 ; done )'
-            SARACMD+='& roslaunch sara_navigation move_base_amcl.launch'
-            SARACMD+='; echo -e "$(tput setaf 1)move_base just died$(tput setaf 7)$(tput setab 0)$(tput setaf 7)$(tput setab 0)" >> $(tty)'
-            SARACMD+='; echo -e "$(tput setaf 1)$(tput setab 7)Im dead"'
-            gnome-terminal --hide-menubar --profile=SARA
-
+            start_terminal_node "NAVIGATION" 'roslaunch sara_navigation move_base_amcl.launch'
         fi
 
         if ${MAPPING}
         then
-            echo 'Launching SLAM navigation'
-            SARACMD='( while true ; do setTitle SLAM ; sleep 2 ; done )'
-            SARACMD+='& roslaunch sara_launch wm_slam_gmapping.launch'
-            SARACMD+='; echo -e "$(tput setaf 1)SLAM just died$(tput setaf 7)$(tput setab 0)$(tput setaf 7)$(tput setab 0)" >> $(tty)'
-            SARACMD+='; echo -e "$(tput setaf 1)$(tput setab 7)Im dead"'
-            gnome-terminal --hide-menubar --profile=SARA
-
+            start_terminal_node "SLAM_NAVIGATION" 'roslaunch sara_launch wm_slam_gmapping.launch'
         fi
-
 
         if ${STATEMACHINE}
         then
-            echo 'Launching flexbe widget'
-            SARACMD='( while true ; do setTitle FLEXBE_WIDGET ; sleep 2 ; done )'
-            SARACMD+='& roslaunch flexbe_widget behavior_ocs.launch'
-            SARACMD+='; echo -e "$(tput setaf 1)flexbe widget just died$(tput setaf 7)$(tput setab 0)$(tput setaf 7)$(tput setab 0)" >> $(tty)'
-            SARACMD+='; echo -e "$(tput setaf 1)$(tput setab 7)Im dead"'
-            gnome-terminal --hide-menubar --profile=SARA
-
+            start_terminal_node "FLEXBE_WIDGET" 'roslaunch flexbe_widget behavior_ocs.launch'
         fi
 
         if ${RVIZ}
         then
-            echo 'Launching rviz'
-            SARACMD='( while true ; do setTitle RVIZ ; sleep 2 ; done )'
-            SARACMD+='& rviz'
-            SARACMD+='; echo -e "$(tput setaf 1)rviz just died$(tput setaf 7)$(tput setab 0)$(tput setaf 7)$(tput setab 0)" >> $(tty)'
-            SARACMD+='; echo -e "$(tput setaf 1)$(tput setab 7)Im dead"'
-            gnome-terminal --hide-menubar --profile=SARA
-
+            start_terminal_node "RVIZ" 'rviz'
         fi
 
         if ${TELEOP}
         then
-            echo 'Launching teleop'
-            SARACMD='( while true ; do setTitle TELEOP ; sleep 2 ; done )'
-            SARACMD+='& roslaunch sara_teleop sara_teleop.launch'
-            SARACMD+='; echo -e "$(tput setaf 1)teleop node just died$(tput setaf 7)$(tput setab 0)$(tput setaf 7)$(tput setab 0)" >> $(tty)'
-            SARACMD+='; echo -e "$(tput setaf 1)$(tput setab 7)Im dead"'
-            gnome-terminal --hide-menubar --profile=SARA
-
+            start_terminal_node "SARA_TELEOP" 'roslaunch sara_teleop sara_teleop.launch'
         fi
 
 
@@ -338,6 +202,12 @@ then
         echo "http://localhost:8888/"
         echo "Or open this link to open wonderland:"
         echo "http://wonderland:8000/admin/"
+
+        sleep 2
+
+rostopic pub /say wm_tts/say "sentence: 'Walking Machine. Operationnal.'
+emotion: 0" --once
+
 
         while ! $( [ ! -r /dev/dynamixel ] || [ ! -r /dev/robotiq ] || [ ! -r /dev/drive1 ] && [ ! -r /dev/drive3 ] || [ ! -r /dev/kinova  ] )
         do
