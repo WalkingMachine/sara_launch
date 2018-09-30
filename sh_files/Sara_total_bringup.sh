@@ -121,8 +121,6 @@ then
 
         sleep 1
 
-        start_terminal_node "WM_TTS" 'roslaunch wm_tts wm_tts.launch'
-
         if ${JET}
         then
             COMMAND='while [ ! $(ssh -t -t nvidia@sara-jetson1 "echo ok" ) ] ; do echo $(tput setaf 3)Still waiting for jetson$(tput setaf 7) ; sleep 1; done'
@@ -204,6 +202,8 @@ then
         echo "http://wonderland:8000/admin/"
 
         sleep 2
+
+        start_terminal_node "WM_TTS" 'roslaunch wm_tts wm_tts.launch'
 
 rostopic pub /say wm_tts/say "sentence: 'Walking Machine. Operationnal.'
 emotion: 0" --once
