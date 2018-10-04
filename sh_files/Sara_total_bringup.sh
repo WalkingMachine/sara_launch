@@ -162,7 +162,7 @@ then
 
             start_terminal_node "COLOR_DETECTOR" 'roslaunch wm_color_detector wm_color_detector.launch'
 
-            start_terminal_node "LAPTOP_DARKNET" 'roslaunch darknet_ros darknet_ros.launch'
+            start_terminal_node "LAPTOP_DARKNET" 'roslaunch darknet_ros darknet_ros.launch darknet_name:=darknet_ros_laptop'
 
             start_terminal_node "FACE_DETECTOR" 'roslaunch ros_face_recognition ros-face-recognition.launch'
 
@@ -204,6 +204,8 @@ then
         sleep 2
 
         start_terminal_node "WM_TTS" 'roslaunch wm_tts wm_tts.launch'
+
+        sleep 2
 
 rostopic pub /say wm_tts/say "sentence: 'Walking Machine. Operationnal.'
 emotion: 0" --once
