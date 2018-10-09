@@ -66,4 +66,7 @@
     <param name="services_glob" value="$(arg services_glob)"/>
     <param name="params_glob" value="$(arg params_glob)"/>
   </node>
+
+  <node name="web_video_server" pkg="web_video_server" type="web_video_server"></node>
+
 </launch>
