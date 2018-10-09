@@ -146,6 +146,10 @@ then
 
         start_terminal_node "DTP_SERVICE" 'rosrun wm_direction_to_point direction_to_point_server.py'
 
+        start_terminal_node "SARA_WEB_INTERFACE" 'roslaunch sara_launch web_interface.launch'
+
+        start_terminal_node "SOUNDBOARD" 'roslauch wm_sound_library wm_sounboard.launch' 
+
         sleep 2
 
 
