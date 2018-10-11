@@ -150,6 +150,8 @@ then
 
         start_terminal_node "SOUNDBOARD" 'roslauch wm_sound_library wm_sounboard.launch' 
 
+        start_terminal_node "FRAME_TO_BOX" 'roslaunch wm_frame_to_box wm_frame_to_box.launch'
+
         sleep 2
 
 
@@ -162,7 +164,6 @@ then
 
         if ${VISION}
         then
-            start_terminal_node "FRAME_TO_BOX" 'roslaunch wm_frame_to_box wm_frame_to_box.launch'
 
             start_terminal_node "COLOR_DETECTOR" 'roslaunch wm_color_detector wm_color_detector.launch'
 
