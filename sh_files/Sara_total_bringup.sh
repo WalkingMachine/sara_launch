@@ -146,6 +146,8 @@ then
 
         start_terminal_node "DTP_SERVICE" 'rosrun wm_direction_to_point direction_to_point_server.py'
 
+        start_terminal_node "FRAME_TO_BOX" 'roslaunch wm_frame_to_box wm_frame_to_box.launch'
+
         sleep 2
 
 
@@ -158,7 +160,6 @@ then
 
         if ${VISION}
         then
-            start_terminal_node "FRAME_TO_BOX" 'roslaunch wm_frame_to_box wm_frame_to_box.launch'
 
             start_terminal_node "COLOR_DETECTOR" 'roslaunch wm_color_detector wm_color_detector.launch'
 
