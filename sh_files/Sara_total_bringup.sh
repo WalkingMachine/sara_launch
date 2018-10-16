@@ -11,7 +11,7 @@ GENIALE=false
 RVIZ=false
 JET=true
 MAPPING=false
-FORCEOFFLINE=true
+FORCEOFFLINE=false
 
 LANGUE="en-US"
 
@@ -101,6 +101,8 @@ then
 
         sleep 3
 
+        start_terminal_node "SOUNDBOARD" 'roslaunch wm_sound_library wm_soundboard.launch' 
+
         if ${FORCEOFFLINE}
             then
             rosparam set /force_offline true
@@ -148,12 +150,14 @@ then
 
         start_terminal_node "SARA_WEB_INTERFACE" 'roslaunch sara_launch web_interface.launch'
 
-        start_terminal_node "SOUNDBOARD" 'roslauch wm_sound_library wm_sounboard.launch' 
-
         start_terminal_node "FRAME_TO_BOX" 'roslaunch wm_frame_to_box wm_frame_to_box.launch'
 
         sleep 2
 
+
+
+rosservice call /wm_play_sound "play:
+  data: 'Engine.wav'"
 
         if ${SPEECH}
         then
@@ -208,9 +212,10 @@ then
 
         sleep 2
 
+
+
         start_terminal_node "WM_TTS" 'roslaunch wm_tts wm_tts.launch'
 
-        sleep 2
 
 rostopic pub /say wm_tts/say "sentence: 'Walking Machine. Operationnal.'
 emotion: 0" --once
