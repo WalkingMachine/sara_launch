@@ -166,18 +166,6 @@ rosservice call /wm_play_sound "play:
             start_terminal_node "SPEECH_SPLITTER" 'roslaunch wm_speech_splitter sara_speech.launch'
         fi
 
-        if ${VISION}
-        then
-
-            start_terminal_node "COLOR_DETECTOR" 'roslaunch wm_color_detector wm_color_detector.launch'
-
-            start_terminal_node "LAPTOP_DARKNET" 'roslaunch darknet_ros darknet_ros.launch darknet_name:=darknet_ros_laptop'
-
-            start_terminal_node "FACE_DETECTOR" 'roslaunch ros_face_recognition ros-face-recognition.launch'
-
-            start_terminal_node "DATA_COLLECTOR" 'roslaunch wm_data_collector data_collector.launch'
-        fi
-
         if ${NAV}  && ! ${MAPPING}
         then
             start_terminal_node "NAVIGATION" 'roslaunch sara_navigation move_base_amcl.launch'
@@ -203,6 +191,19 @@ rosservice call /wm_play_sound "play:
             start_terminal_node "SARA_TELEOP" 'roslaunch sara_teleop sara_teleop.launch'
         fi
 
+	sleep 2
+
+        if ${VISION}
+        then
+
+            start_terminal_node "COLOR_DETECTOR" 'roslaunch wm_color_detector wm_color_detector.launch'
+
+            start_terminal_node "LAPTOP_DARKNET" 'roslaunch darknet_ros darknet_ros.launch darknet_name:=darknet_ros_laptop'
+
+            start_terminal_node "FACE_DETECTOR" 'roslaunch ros_face_recognition ros-face-recognition.launch'
+
+            start_terminal_node "DATA_COLLECTOR" 'roslaunch wm_data_collector data_collector.launch'
+        fi
 
         echo "fully running"
         echo "Open this link to open vizbox:"
