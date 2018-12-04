@@ -52,7 +52,7 @@
   <arg name="hw_registered_processing"        default="false" unless="$(arg depth_registration)" />
   <arg name="sw_registered_processing"        default="false" unless="$(arg depth_registration)" />
   <rosparam>
-    head_xtion//depth/image_raw/compressedDepth/png_level: 5
+    head_xtion/depth/image_raw/compressedDepth/png_level: 5
   </rosparam>
 
   <!-- Disable bond topics by default -->
