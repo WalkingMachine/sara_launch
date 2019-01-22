@@ -14,7 +14,7 @@ alias SARARC='atom ~/sara_ws/src/sara_launch/sh_files/sararc.sh 2> /dev/null'
 
 # Alias de Sara
 alias FLEXBE='SOURCERC; roslaunch flexbe_onboard behavior_onboard.launch'
-alias FLEXBEWIDGET='SOURCERC; roslaunch flexbe_widget behavior_ocs.launch'
+alias FLEXBEWIDGET='SOURCERC; roslaunch flexbe_app flexbe_full.launch'
 alias FLEXBERUNBEHAVIOR='SOURCERC; rosrun flexbe_widget be_launcher -b'
 alias START_SARA='SOURCERC; ~/sara_ws/src/sara_launch/sh_files/Sara_total_bringup.sh'
 alias TELEOP='SOURCERC; roslaunch sara_teleop sara_teleop.launch'
