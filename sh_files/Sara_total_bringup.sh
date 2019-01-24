@@ -178,7 +178,7 @@ rosservice call /wm_play_sound "play:
 
         if ${STATEMACHINE}
         then
-            start_terminal_node "FLEXBE_WIDGET" 'roslaunch flexbe_widget behavior_ocs.launch'
+            start_terminal_node "FLEXBE_APP" 'roslaunch flexbe_app flexbe_ocs.launch'
         fi
 
         if ${RVIZ}
