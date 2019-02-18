@@ -1,0 +1,28 @@
+<launch>
+
+
+    <!-- start robot description -->
+        <include file="$(find sara_description)/launch/sara_description.launch"/>
+
+    <!-- start ros control related nodes -->
+        <include file="$(find sara_launch)/launch/control/sara_controllers.launch"/>
+
+    <!--    start the moveit nodes   -->
+        <include file="$(find sara_moveit)/launch/move_group.launch"/>
+
+    <!-- start trajectory manager -->
+        <include file="$(find wm_trajectory_manager)/launch/trajectory_manager.launch"/>
+
+    <!-- start pose publication -->
+        <include file="$(find sara_launch)/launch/robot_pose_publisher/robot_pose_publisher.launch"/>
+
+    <!-- start scans -->
+        <include file="$(find sara_launch)/launch/pointcloud_to_laserscan/pointcloud_to_laserscan.launch"/>
+
+    <!-- start leg detector and peoplefollower node -->
+        <include file="$(find sara_launch)/launch/people_launch/wm_leg_detector.launch"/>
+
+    <!-- start the face node -->
+        <include file="$(find sara_launch)/launch/face/sara_face.launch" />
+
+</launch>
