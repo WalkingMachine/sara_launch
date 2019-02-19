@@ -31,5 +31,10 @@
 
     <!-- start the face node -->
         <include file="$(find sara_launch)/launch/face/sara_face.launch" />
+    
+    
+    <!-- start arduino nodes -->
+        <include file="$(find sara_udev)/launch/launch_arduinos.launch"/>
 
 </launch>
+

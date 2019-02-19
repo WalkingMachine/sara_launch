@@ -81,6 +81,48 @@ function start_terminal_node {
     gnome-terminal --hide-menubar --profile=SARA
 }
 
+function check_usb_devices {
+	result=true
+	if ! [ -r /dev/SARA/motors/dynamixel ]
+	then
+		echo "$(tput setaf 1)No connection to dynamixel$(tput setaf 7)"
+		result=false
+	fi
+	if ! [ -r /dev/SARA/gripper/robotiq ]
+	then
+		echo "$(tput setaf 1)No connection to robotiq$(tput setaf 7)"
+		result=false
+	fi
+	if ! [ -r /dev/SARA/motors/kinova ] 
+	then
+		echo "$(tput setaf 1)No connection to kinova$(tput setaf 7)"
+		result=false
+	fi
+	if ! [ -r /dev/SARA/sensors/laser_base ] 
+	then
+		echo "$(tput setaf 1)No connection to laser_base$(tput setaf 7)"
+		result=false
+	fi
+	if [ -r /dev/SARA/motors/roboteq ]
+	then
+	 	if ! [ 4 -eq $(ls -1 /dev/SARA/motors/roboteq | wc -l) ]
+		then
+			echo "$(tput setaf 1)Missing roboteq drive(s)$(tput setaf 7)"
+			result=false
+		fi
+	else
+		echo "$(tput setaf 1)No connection to roboteq drives$(tput setaf 7)"
+	fi
+
+	if $result
+	then
+		true
+	else
+		false
+	fi
+}
+
+
 # Export the variable that will contain the command for each orbital terminals
 export SARACMD
 
@@ -91,11 +133,19 @@ then
     while true
     do
         echo 'waiting for power'
-        while [ ! -r /dev/dynamixel ] || [ ! -r /dev/robotiq ] || [ ! -r /dev/kinova  ] || $( [ ! -r /dev/drive1 ] && [ ! -r /dev/drive3 ] )
+        while ! check_usb_devices
         do
+	    tree /dev/SARA
+	    echo "====================="
             sleep 1
         done
         echo > tempPID
+
+	clear
+	echo "======================="
+	echo "=== IT'S HAPPENING! ==="
+	echo "======================="
+	echo
 
         start_terminal_node "roscore" "roscore"
 
@@ -222,7 +272,7 @@ rostopic pub /say wm_tts/say "sentence: 'Walking Machine. Operationnal.'
 emotion: 0" --once
 
 
-        while ! $( [ ! -r /dev/dynamixel ] || [ ! -r /dev/robotiq ] || [ ! -r /dev/drive1 ] && [ ! -r /dev/drive3 ] || [ ! -r /dev/kinova  ] )
+        while check_usb_devices
         do
             sleep 1
         done
