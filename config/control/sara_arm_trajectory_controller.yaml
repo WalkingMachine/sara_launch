@@ -9,6 +9,7 @@ sara_arm_trajectory_controller:
     - right_elbow_yaw_joint
     - right_wrist_pitch_joint
     - right_wrist_roll_joint
+    - base_actuator_joint
 
   gains: # Required because we're controlling a velocity interface
     right_shoulder_roll_joint:    {p: 8,  d: 0, i: 0, i_clamp: 1}
@@ -17,4 +18,5 @@ sara_arm_trajectory_controller:
     right_elbow_pitch_joint:      {p: 5,  d: 0.1, i: 10, i_clamp: 1}
     right_elbow_yaw_joint:        {p: 2,  d: 0, i: 0, i_clamp: 1}
     right_wrist_pitch_joint:      {p: 0.3,  d: 0.005, i: 0.005, i_clamp: 1}
-    right_wrist_roll_joint:        {p: 0.3,  d: 0.005, i: 0.005, i_clamp: 1}
+    right_wrist_roll_joint:       {p: 0.3,  d: 0.005, i: 0.005, i_clamp: 1}
+    base_actuator_joint:	  {p: 0.001, d: 0, i: 0.001, i_clamp: 1}
