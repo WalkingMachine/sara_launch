@@ -20,3 +20,4 @@ sara_arm_trajectory_controller:
     right_wrist_pitch_joint:      {p: 0.3,  d: 0.005, i: 0.005, i_clamp: 1}
     right_wrist_roll_joint:       {p: 0.3,  d: 0.005, i: 0.005, i_clamp: 1}
     base_actuator_joint:          {p: 1, d: 0, i: 0.001, i_clamp: 1}
+
