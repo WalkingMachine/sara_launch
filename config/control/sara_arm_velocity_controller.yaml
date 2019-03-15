@@ -9,3 +9,4 @@ sara_arm_velocity_controller:
     - right_elbow_yaw_joint
     - right_wrist_pitch_joint
     - right_wrist_roll_joint
+    - base_actuator_joint
