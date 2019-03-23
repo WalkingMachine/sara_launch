@@ -153,10 +153,14 @@ export PIDFile
 if ! $HELP
 then
 
+
+    ####################################################
+    # Kill all remaining processes if needed
+    cleanup_all
+
     ####################################################
     # Launch all persistent processes
 
-    echo > /tmp/tempPIDPersistent
     start_terminal_node "roscore" "roscore" ""$PIDFILENAMEPERSISTENT""
 
     sleep 3
@@ -198,9 +202,6 @@ then
     fi
 
 
-
-
-
     # Loop forever
     while true
     do
@@ -218,10 +219,6 @@ then
         echo "=== IT'S HAPPENING! ==="
         echo "======================="
         echo
-
-        echo > /tmp/"$PIDFILENAMEESTOP"
-
-
 
 
 
