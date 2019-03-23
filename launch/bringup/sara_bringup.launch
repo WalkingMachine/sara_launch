@@ -3,6 +3,9 @@
 
     <!-- start robot description -->
         <include file="$(find sara_description)/launch/sara_description.launch"/>
+    
+    <!-- start arduino nodes -->
+        <include file="$(find sara_udev)/launch/launch_arduinos.launch"/>
 
     <!-- start ros control related nodes -->
         <include file="$(find sara_control)/launch/sara_hardware.launch"/>
@@ -32,9 +35,6 @@
     <!-- start the face node -->
         <include file="$(find sara_launch)/launch/face/sara_face.launch" />
     
-    
-    <!-- start arduino nodes -->
-        <include file="$(find sara_udev)/launch/launch_arduinos.launch"/>
 
 </launch>
 
