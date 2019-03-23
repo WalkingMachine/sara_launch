@@ -61,11 +61,11 @@ shift $(( OPTIND - 1 ))
 # Function that can kill all orbital terminals
 function cleanup {
     echo 'killing all processes'
-    for f in $(cat ~/tempPID)
+    for f in $(cat /tmp/tempPID)
     do
         kill -s 9 $f
     done
-    echo > ~/tempPID
+    echo > /tmp/tempPID
 }
 trap cleanup EXIT
 
@@ -82,44 +82,44 @@ function start_terminal_node {
 }
 
 function check_usb_devices {
-	result=true
-	if ! [ -r /dev/SARA/motors/dynamixel ]
-	then
-		echo "$(tput setaf 1)No connection to dynamixel$(tput setaf 7)"
-		result=false
-	fi
-	if ! [ -r /dev/SARA/gripper/robotiq ]
-	then
-		echo "$(tput setaf 1)No connection to robotiq$(tput setaf 7)"
-		result=false
-	fi
-	if ! [ -r /dev/SARA/motors/kinova ] 
-	then
-		echo "$(tput setaf 1)No connection to kinova$(tput setaf 7)"
-		result=false
-	fi
-	if ! [ -r /dev/SARA/sensors/laser_base ] 
-	then
-		echo "$(tput setaf 1)No connection to laser_base$(tput setaf 7)"
-		result=false
-	fi
-	if [ -r /dev/SARA/motors/roboteq ]
-	then
-	 	if ! [ 4 -eq $(ls -1 /dev/SARA/motors/roboteq | wc -l) ]
-		then
-			echo "$(tput setaf 1)Missing roboteq drive(s)$(tput setaf 7)"
-			result=false
-		fi
-	else
-		echo "$(tput setaf 1)No connection to roboteq drives$(tput setaf 7)"
-	fi
+    result=true
+    if ! [ -r /dev/SARA/motors/dynamixel ]
+    then
+        echo "$(tput setaf 1)No connection to dynamixel$(tput setaf 7)"
+        result=false
+    fi
+    if ! [ -r /dev/SARA/gripper/robotiq ]
+    then
+        echo "$(tput setaf 1)No connection to robotiq$(tput setaf 7)"
+        result=false
+    fi
+    if ! [ -r /dev/SARA/motors/kinova ] 
+    then
+        echo "$(tput setaf 1)No connection to kinova$(tput setaf 7)"
+        result=false
+    fi
+    if ! [ -r /dev/SARA/sensors/laser_base ] 
+    then
+        echo "$(tput setaf 1)No connection to laser_base$(tput setaf 7)"
+        result=false
+    fi
+    if [ -r /dev/SARA/motors/roboteq ]
+    then
+         if ! [ 4 -eq $(ls -1 /dev/SARA/motors/roboteq | wc -l) ]
+        then
+            echo "$(tput setaf 1)Missing roboteq drive(s)$(tput setaf 7)"
+            result=false
+        fi
+    else
+        echo "$(tput setaf 1)No connection to roboteq drives$(tput setaf 7)"
+    fi
 
-	if $result
-	then
-		true
-	else
-		false
-	fi
+    if $result
+    then
+        true
+    else
+        false
+    fi
 }
 
 
@@ -128,6 +128,23 @@ export SARACMD
 
 if ! $HELP
 then
+    start_terminal_node "roscore" "roscore"
+    sleep 3
+
+
+    if ${FORCEOFFLINE}
+        then
+        rosparam set /force_offline true
+    fi
+
+    start_terminal_node "SOUNDBOARD" 'roslaunch wm_sound_library wm_soundboard.launch' 
+    echo "Load categoryToNames.yaml"
+    rosparam load ~/sara_ws/src/sara_launch/sh_files/ressources/categoryToNames.yaml CategoryToNames
+    echo "Setting voice to $LANGUE"
+    rosparam set /langue $LANGUE
+
+
+
 
     # Loop forever
     while true
@@ -135,34 +152,22 @@ then
         echo 'waiting for power'
         while ! check_usb_devices
         do
-	    tree /dev/SARA
-	    echo "====================="
+        tree /dev/SARA
+        echo "====================="
             sleep 1
         done
         echo > tempPID
 
-	clear
-	echo "======================="
-	echo "=== IT'S HAPPENING! ==="
-	echo "======================="
-	echo
+        clear
+        echo "======================="
+        echo "=== IT'S HAPPENING! ==="
+        echo "======================="
+        echo
 
-        start_terminal_node "roscore" "roscore"
 
-        sleep 3
+        
 
-        start_terminal_node "SOUNDBOARD" 'roslaunch wm_sound_library wm_soundboard.launch' 
-
-        if ${FORCEOFFLINE}
-            then
-            rosparam set /force_offline true
-        fi
-
-        echo "Load categoryToNames.yaml"
-        rosparam load ~/sara_ws/src/sara_launch/sh_files/ressources/categoryToNames.yaml CategoryToNames
-
-        echo "Setting voice to $LANGUE"
-        rosparam set /langue $LANGUE
+        
 
 #        rosparam set use_sim_time true
 #        date --set="$ssh nvidia@sara-jetson1"
@@ -241,7 +246,7 @@ rosservice call /wm_play_sound "play:
             start_terminal_node "SARA_TELEOP" 'roslaunch sara_teleop sara_teleop.launch'
         fi
 
-	sleep 2
+    sleep 2
 
         if ${VISION}
         then
