@@ -10,6 +10,6 @@ if [ -r "$HOME/.bashrc" ]; then
 fi
 
 # add your dev-specific stuff here
-echo $$ >> ~/tempPID
+echo $$ >> /tmp/$PIDFile
 
 eval $SARACMD
