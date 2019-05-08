@@ -258,7 +258,7 @@ rosservice call /wm_play_sound "play:
 
         if ${SPEECH}
         then
-            start_terminal_node "GOOGLE_STT" 'roslaunch lab_ros_speech_to_text google_tts.launch'  "$PIDFILENAMEESTOP"
+            start_terminal_node "GOOGLE_STT" 'roslaunch success_google_stt google_stt.launch method:=mic'  "$PIDFILENAMEESTOP"
 
             start_terminal_node "SPEECH_SPLITTER" 'roslaunch wm_speech_splitter sara_speech.launch'  "$PIDFILENAMEESTOP"
         fi
