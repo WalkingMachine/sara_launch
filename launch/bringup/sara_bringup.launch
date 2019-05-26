@@ -27,7 +27,6 @@
 
     <!-- start scans -->
         <include file="$(find sara_launch)/launch/urg_node/wm_urg_node.launch"/>
-        <include file="$(find sara_launch)/launch/pointcloud_to_laserscan/pointcloud_to_laserscan.launch"/>
 
     <!-- start leg detector and peoplefollower node -->
         <include file="$(find sara_launch)/launch/people_launch/wm_leg_detector.launch"/>

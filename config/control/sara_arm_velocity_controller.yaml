@@ -1,6 +1,6 @@
 sara_arm_velocity_controller:
   type: "velocity_controllers/JointGroupVelocityController"
-  publish_rate: 100               # default: 50
+  publish_rate: 50               # default: 50
   joints:
     - right_shoulder_roll_joint
     - right_shoulder_pitch_joint

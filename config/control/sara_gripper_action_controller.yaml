@@ -3,3 +3,4 @@ sara_gripper_action_controller:
   joint: right_finger_joint
   goal_tolerance: 0.005
   stall_timeout: 2.5
+  publish_rate: 50               # default: 50
