@@ -202,17 +202,39 @@ then
     fi
 
 
+
+    start_terminal_node "WM_TTS" 'roslaunch wm_tts wm_tts.launch'  "$PIDFILENAMEPERSISTENT"
+
+    sleep 3
+
+    rostopic pub /say wm_tts/say "sentence: 'My brain is ready.'
+emotion: 0" --once
+
     # Loop forever
     while true
     do
-        echo 'waiting for power'
-        while ! check_usb_devices
-        do
-        tree /dev/SARA
-        echo "====================="
-            sleep 1
-        done
 
+        if ! check_usb_devices
+        then
+rostopic pub /say wm_tts/say "sentence: 'Wait! I dont feel my body. What appened to me?'
+emotion: 0" --once
+
+            echo 'waiting for power'
+            while ! check_usb_devices
+            do
+            tree /dev/SARA
+            echo "====================="
+                sleep 1
+            done
+rostopic pub /say wm_tts/say "sentence: 'Thanks! I feel better now!'
+emotion: 0" --once
+
+        fi
+
+
+
+rostopic pub /say wm_tts/say "sentence: 'Initiating hardware connection.'
+emotion: 0" --once
 
         clear
         echo "======================="
@@ -246,7 +268,7 @@ then
         VIZ=$(rospack find vizbox)
         start_terminal_node "VIZBOX" "cd $VIZ ; ./server.py"  "$PIDFILENAMEESTOP"
 
-        start_terminal_node "UI_HELPER" 'rosrun sara_ui sara_ui_helper'  "$PIDFILENAMEESTOP"
+        #start_terminal_node "UI_HELPER" 'rosrun sara_ui sara_ui_helper'  "$PIDFILENAMEESTOP"
 
 
         sleep 2
@@ -307,10 +329,7 @@ rosservice call /wm_play_sound "play:
 
 
 
-        start_terminal_node "WM_TTS" 'roslaunch wm_tts wm_tts.launch'  "$PIDFILENAMEESTOP"
-
-
-rostopic pub /say wm_tts/say "sentence: 'Walking Machine. Operationnal.'
+rostopic pub /say wm_tts/say "sentence: 'Sara the Walking Machine. Ready to roll out!'
 emotion: 0" --once
 
 
@@ -320,7 +339,8 @@ emotion: 0" --once
         done
 
 
-
+rostopic pub /say wm_tts/say "sentence: 'Oh my! I dont feel good at all!'
+emotion: 0" --once
         ####################################################
         # Kill all hardware dependent processes
 
