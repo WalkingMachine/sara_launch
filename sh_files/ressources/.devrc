@@ -15,7 +15,7 @@ setTitle() {
     echo -en "\033]0;$@\007" 
 }
 
-alias SARACMD='eval $SARACMD'
+alias SARACMD='eval $SARACMDSTRING'
 
 # add your dev-specific stuff here
 echo $$ >> /tmp/$PIDFile
