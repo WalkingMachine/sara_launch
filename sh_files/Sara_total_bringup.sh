@@ -87,10 +87,10 @@ function start_terminal_node {
     PIDFile=$3
 
     echo "Starting $Name"
-    SARACMD='( while true ; do setTitle '"$Name"' ; sleep 2 ; done ) & '
-    SARACMD+=$Command
-    SARACMD+='; echo -e "$(tput setaf 1)'"$Name"' just died$(tput setaf 7)$(tput setab 0)$(tput setaf 7)$(tput setab 0)" >> $(tty)'
-    SARACMD+='; echo -e "$(tput setaf 1)$(tput setab 7)Im dead"'
+    SARACMDSTRING='( while true ; do setTitle '"$Name"' ; sleep 2 ; done ) & '
+    SARACMDSTRING+=$Command
+    SARACMDSTRING+='; echo -e "$(tput setaf 1)'"$Name"' just died$(tput setaf 7)$(tput setab 0)$(tput setaf 7)$(tput setab 0)" >> $(tty)'
+    SARACMDSTRING+='; echo -e "$(tput setaf 1)$(tput setab 7)Im dead"'
     gnome-terminal --hide-menubar --profile=SARA
 }
 
@@ -141,7 +141,7 @@ function check_usb_devices {
 ####################################################################
 
 # Export the variable that will contain the command for each orbital terminals
-export SARACMD
+export SARACMDSTRING
 export PIDFile
 
 
@@ -292,7 +292,7 @@ rosservice call /wm_play_sound "play:
 
         if ${MAPPING}
         then
-            start_terminal_node "SLAM_NAVIGATION" 'roslaunch sara_launch wm_slam_gmapping.launch'  "$PIDFILENAMEESTOP"
+            start_terminal_node "SLAM_NAVIGATION" 'roslaunch sara_navigation wm_slam_gmapping.launch'  "$PIDFILENAMEESTOP"
         fi
 
         if ${RVIZ}
