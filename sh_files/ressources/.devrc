@@ -9,7 +9,15 @@ if [ -r "$HOME/.bashrc" ]; then
     . "$HOME/.bashrc"
 fi
 
+
+# Fonction qui permet de changer le titre
+setTitle() {
+    echo -en "\033]0;$@\007" 
+}
+
+alias SARACMD='eval $SARACMD'
+
 # add your dev-specific stuff here
 echo $$ >> /tmp/$PIDFile
 
-eval $SARACMD
+SARACMD

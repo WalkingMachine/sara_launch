@@ -292,7 +292,7 @@ rosservice call /wm_play_sound "play:
 
         if ${MAPPING}
         then
-            start_terminal_node "SLAM_NAVIGATION" 'roslaunch sara_launch wm_slam_gmapping.launch'  "$PIDFILENAMEESTOP"
+            start_terminal_node "SLAM_NAVIGATION" 'roslaunch sara_navigation wm_slam_gmapping.launch'  "$PIDFILENAMEESTOP"
         fi
 
         if ${RVIZ}
