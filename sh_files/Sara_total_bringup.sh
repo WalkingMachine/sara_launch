@@ -276,7 +276,7 @@ emotion: 0" --once
 
 
 rosservice call /wm_play_sound "play:
-  data: 'Engine.wav'"
+  data: 'sara-start.wav'"
 
         if ${SPEECH}
         then
