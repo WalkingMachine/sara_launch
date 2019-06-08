@@ -316,7 +316,15 @@ rosservice call /wm_play_sound "play:
 
             start_terminal_node "FACE_DETECTOR" 'roslaunch ros_face_recognition ros-face-recognition.launch'  "$PIDFILENAMEESTOP"
 
-            start_terminal_node "DATA_COLLECTOR" 'roslaunch wm_data_collector data_collector.launch'  "$PIDFILENAMEESTOP"
+            start_terminal_node "ENTITY_TRACKER" 'roslaunch wm_entity_tracker wm_entity_tracker.launch'  "$PIDFILENAMEESTOP"
+
+            start_terminal_node "OBJECT_SEGMENTATION" 'roslaunch wm_object_segmentation wm_object_segmentation.launch'  "$PIDFILENAMEESTOP"
+
+            start_terminal_node "GRASP_DETECTION" 'roslaunch gpd tutorial2.launch'  "$PIDFILENAMEESTOP"
+
+rosparam set /process_object_segmentation false
+rosparam set /process_table_segmentation false
+
         fi
 
         echo "fully running"
