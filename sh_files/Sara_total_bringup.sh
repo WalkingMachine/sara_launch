@@ -323,6 +323,12 @@ rosservice call /wm_play_sound "play:
 
             start_terminal_node "GRASP_DETECTION" 'roslaunch gpd tutorial2.launch'  "$PIDFILENAMEESTOP"
 
+            start_terminal_node "OPENPIFPAF_SERVER" 'python3.7 -m openpifpafwebdemo.server'  "$PIDFILENAMEESTOP"
+
+            start_terminal_node "OPENPIFPAF_WRAPPER" 'sleep 10 ; rosrun wm_openpifpaf_ros_wrapper test_pose.py'  "$PIDFILENAMEESTOP"
+
+
+
 rosparam set /process_object_segmentation false
 rosparam set /process_table_segmentation false
 
