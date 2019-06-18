@@ -88,6 +88,7 @@ function start_terminal_node {
 
     echo "Starting $Name"
     SARACMDSTRING='( while true ; do setTitle '"$Name"' ; sleep 2 ; done ) & '
+    SARACMDSTRING+="history -s SARACMD ;"
     SARACMDSTRING+=$Command
     SARACMDSTRING+='; echo -e "$(tput setaf 1)'"$Name"' just died$(tput setaf 7)$(tput setab 0)$(tput setaf 7)$(tput setab 0)" >> $(tty)'
     SARACMDSTRING+='; echo -e "$(tput setaf 1)$(tput setab 7)Im dead"'
@@ -187,21 +188,23 @@ then
 
     start_terminal_node "SARA_NLU" 'roslaunch wm_nlu wm_nlu.launch'  "$PIDFILENAMEPERSISTENT"
 
-    start_terminal_node "FLEXBE_ENGINE" 'roslaunch flexbe_onboard behavior_onboard.launch'  "$PIDFILENAMEPERSISTENT"
-
     start_terminal_node "DTP_SERVICE" 'rosrun wm_direction_to_point direction_to_point_server.py'  "$PIDFILENAMEPERSISTENT"
 
     start_terminal_node "SARA_WEB_INTERFACE" 'roslaunch sara_launch web_interface.launch'  "$PIDFILENAMEPERSISTENT"
 
     start_terminal_node "FRAME_TO_BOX" 'roslaunch wm_frame_to_box wm_frame_to_box.launch'  "$PIDFILENAMEPERSISTENT"
 
+    start_terminal_node "OPENPIFPAF_WRAPPER" 'rostopic echo /sara_command & rostopic echo /sara_said'  "$PIDFILENAMEPERSISTENT"
 
     if ${STATEMACHINE}
     then
-        start_terminal_node "FLEXBE_APP" 'roslaunch flexbe_app flexbe_ocs.launch'  "$PIDFILENAMEPERSISTENT"
+        start_terminal_node "FLEXBE" 'roslaunch flexbe_app flexbe_full.launch'  "$PIDFILENAMEPERSISTENT"
     fi
 
-
+    if ${RVIZ}
+    then
+        start_terminal_node "RVIZ" 'rviz'  "$PIDFILENAMEPERSISTENT"
+    fi
 
     start_terminal_node "WM_TTS" 'roslaunch wm_tts wm_tts.launch'  "$PIDFILENAMEPERSISTENT"
 
@@ -253,7 +256,9 @@ emotion: 0" --once
 
         start_terminal_node "SARA_HARDWARE" 'roslaunch sara_launch sara_bringup.launch'  "$PIDFILENAMEESTOP"
 
-        sleep 1
+        sleep 2
+
+        start_terminal_node "SARA_MOVEIT" 'roslaunch sara_moveit move_group.launch'  "$PIDFILENAMEESTOP"
 
         if ${JET}
         then
@@ -271,7 +276,7 @@ emotion: 0" --once
         #start_terminal_node "UI_HELPER" 'rosrun sara_ui sara_ui_helper'  "$PIDFILENAMEESTOP"
 
 
-        sleep 2
+        sleep 4
 
 
 
@@ -285,6 +290,13 @@ rosservice call /wm_play_sound "play:
             start_terminal_node "SPEECH_SPLITTER" 'roslaunch wm_speech_splitter sara_speech.launch'  "$PIDFILENAMEESTOP"
         fi
 
+        if ${TELEOP}
+        then
+            start_terminal_node "SARA_TELEOP" 'roslaunch sara_teleop sara_teleop.launch'  "$PIDFILENAMEESTOP"
+        fi
+
+    sleep 2
+
         if ${NAV}  && ! ${MAPPING}
         then
             start_terminal_node "NAVIGATION" 'roslaunch sara_navigation move_base_amcl.launch'  "$PIDFILENAMEESTOP"
@@ -295,24 +307,13 @@ rosservice call /wm_play_sound "play:
             start_terminal_node "SLAM_NAVIGATION" 'roslaunch sara_navigation wm_slam_gmapping.launch'  "$PIDFILENAMEESTOP"
         fi
 
-        if ${RVIZ}
-        then
-            start_terminal_node "RVIZ" 'rviz'  "$PIDFILENAMEESTOP"
-        fi
-
-        if ${TELEOP}
-        then
-            start_terminal_node "SARA_TELEOP" 'roslaunch sara_teleop sara_teleop.launch'  "$PIDFILENAMEESTOP"
-        fi
-
-    sleep 2
 
         if ${VISION}
         then
 
             start_terminal_node "COLOR_DETECTOR" 'roslaunch wm_color_detector wm_color_detector.launch'  "$PIDFILENAMEESTOP"
 
-            start_terminal_node "LAPTOP_DARKNET" 'roslaunch darknet_ros darknet_ros.launch darknet_name:=darknet_ros_laptop'  "$PIDFILENAMEESTOP"
+#            start_terminal_node "LAPTOP_DARKNET" 'roslaunch darknet_ros darknet_ros.launch darknet_name:=darknet_ros_laptop'  "$PIDFILENAMEESTOP"
 
             start_terminal_node "FACE_DETECTOR" 'roslaunch ros_face_recognition ros-face-recognition.launch'  "$PIDFILENAMEESTOP"
 
