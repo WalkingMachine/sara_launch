@@ -36,7 +36,7 @@ while getopts "asvhtfJngzl:mo" opt; do
     s) SPEECH=true ;;
     v) VISION=true ;;
     J) JET=false ;;
-    o) FORCEOFFLINE=false ;;
+    o) FORCEOFFLINE=true ;;
     t) TELEOP=true ;;
     f) STATEMACHINE=true ;;
     g) GENIALE=true ;;
@@ -51,7 +51,8 @@ while getopts "asvhtfJngzl:mo" opt; do
         echo ' -h  show this help message'
         echo ' -J  do not use the jetson'
         echo ' -n  activate autonaumous navigation'
-        echo ' -o  use the tts in online mode'
+        echo ' -m  activate slam gmaping mode. For mapping.'
+        echo ' -o  force the offline mode.'
         echo ' -s  activate speech to text'
         echo ' -t  activate teleoperation'
         echo ' -v  activate vision stack'
@@ -108,12 +109,12 @@ function check_usb_devices {
         echo "$(tput setaf 1)No connection to robotiq$(tput setaf 7)"
         result=false
     fi
-    if ! [ -r /dev/SARA/motors/kinova ] 
+    if ! [ -r /dev/SARA/motors/kinova ]
     then
         echo "$(tput setaf 1)No connection to kinova$(tput setaf 7)"
         result=false
     fi
-    if ! [ -r /dev/SARA/sensors/laser_base ] 
+    if ! [ -r /dev/SARA/sensors/laser_base ]
     then
         echo "$(tput setaf 1)No connection to laser_base$(tput setaf 7)"
         result=false
@@ -195,6 +196,20 @@ then
     start_terminal_node "FRAME_TO_BOX" 'roslaunch wm_frame_to_box wm_frame_to_box.launch'  "$PIDFILENAMEPERSISTENT"
 
     start_terminal_node "OPENPIFPAF_WRAPPER" 'rostopic echo /sara_command & rostopic echo /sara_said'  "$PIDFILENAMEPERSISTENT"
+
+
+
+    if ${SPEECH}
+    then
+        if ${FORCEOFFLINE}
+        then
+            start_terminal_node "SNIPS_STT" 'roslaunch wm_snips_asr wm_snips_asr.launch'  "$PIDFILENAMEPERSISTENT"
+        else
+            start_terminal_node "GOOGLE_STT" 'roslaunch success_google_stt google_stt.launch method:=mic'  "$PIDFILENAMEPERSISTENT"
+            start_terminal_node "SPEECH_SPLITTER" 'roslaunch wm_speech_splitter sara_speech.launch'  "$PIDFILENAMEPERSISTENT"
+        fi
+    fi
+
 
     if ${STATEMACHINE}
     then
@@ -283,12 +298,6 @@ emotion: 0" --once
 rosservice call /wm_play_sound "play:
   data: 'sara-start.wav'"
 
-        if ${SPEECH}
-        then
-            start_terminal_node "GOOGLE_STT" 'roslaunch success_google_stt google_stt.launch method:=mic'  "$PIDFILENAMEESTOP"
-
-            start_terminal_node "SPEECH_SPLITTER" 'roslaunch wm_speech_splitter sara_speech.launch'  "$PIDFILENAMEESTOP"
-        fi
 
         if ${TELEOP}
         then
