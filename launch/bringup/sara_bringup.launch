@@ -17,7 +17,6 @@
         <include file="$(find roboteq_driver)/launch/driveUltime.launch"/>
         <include file="$(find wm_mecanum_cmd)/launch/wm_mecanum_auto.launch"/>
         <include file="$(find wm_odometry_feedback)/launch/wm_odometry_feedback.launch"/>
-        <include file="$(find sara_moveit)/launch/move_group.launch"/>
 
     <!-- start trajectory manager -->
         <include file="$(find wm_trajectory_manager)/launch/trajectory_manager.launch"/>
