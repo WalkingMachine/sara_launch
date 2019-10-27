@@ -1,3 +1,0 @@
-<launch>
-    <include file="$(find lab_ros_speech_to_text)/launch/google_tts.launch" />
-</launch>
