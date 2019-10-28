@@ -1,0 +1,33 @@
+<launch>
+
+    <!-- start robot description in gazebo -->
+        <include file="$(find sara_description)/launch/sara_description.launch">
+           <arg name="sim" value="true"/>
+        </include>
+
+    <!-- start moveit -->
+        <include file="$(find sara_moveit)/launch/move_group.launch"/>
+
+    <!-- start navigation -->
+        <include file="$(find sara_navigation)/launch/amcl_demo.launch"/>
+
+
+    <!-- start rviz -->
+        <node name="rviz" pkg="rviz" type="rviz" respawn="false" output="screen"/>
+
+
+<!--
+        <node pkg="rostopic" type="rostopic" name="send_first_trajectory"
+          args="pub /sara_arm_trajectory_controller/command trajectory_msgs/JointTrajectory 'header: { seq: 0, stamp: { secs: 0, nsecs: 0 } , frame_id: '' } >
+joint_names: [ front_actuator_joint, right_elbow_pitch_joint, right_elbow_yaw_joint, right_shoulder_pitch_joint,
+  right_shoulder_roll_joint, right_shoulder_yaw_joint, right_wrist_pitch_joint, right_wrist_roll_joint ] ,
+points: [
+{ positions: [ 0.35, 0.0, 0.0, -0.34, 0.0, 0.0, 0.0, 0.0 ] ,
+velocities: [ ] ,
+accelerations: [ ] ,
+effort: [ ] ,
+time_from_start: { secs: 0, nsecs: 500000000 } } ]
+
+    '" />
+-->
+</launch>
