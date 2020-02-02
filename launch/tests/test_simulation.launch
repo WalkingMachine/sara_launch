@@ -9,7 +9,7 @@
         <include file="$(find sara_moveit)/launch/move_group.launch"/>
 
     <!-- start navigation -->
-        <include file="$(find sara_navigation)/launch/amcl_demo.launch"/>
+        <include file="$(find sara_navigation)/launch/move_base_amcl.launch"/>
 
 
     <!-- start rviz -->
