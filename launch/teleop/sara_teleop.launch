@@ -1,8 +1,4 @@
 <launch>
-
-    <!-- start the robot -->
-        <include file="$(find sara_launch)/launch/bringup/sara_bringup.launch"/>
-
     <!--    start the teleop nodes   -->
         <include file="$(find sara_teleop)/launch/sara_teleop.launch"/>
 

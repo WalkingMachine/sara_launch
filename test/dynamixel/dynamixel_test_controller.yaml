@@ -1,9 +1,0 @@
-dynamixel_test_controller:
-  #type: "velocity_controllers/JointTrajectoryController"
-  type: "velocity_controllers/JointGroupVelocityController"
-  publish_rate: 100               # default: 50
-  joints:
-    - right_wrist_pitch_joint
-    - right_wrist_roll_joint
-    - head_pitch_joint
-#    - head_yaw_joint
