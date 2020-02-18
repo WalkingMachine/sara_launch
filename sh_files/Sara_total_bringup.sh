@@ -195,7 +195,7 @@ then
 
     start_terminal_node "FRAME_TO_BOX" 'roslaunch wm_frame_to_box wm_frame_to_box.launch'  "$PIDFILENAMEPERSISTENT"
 
-    start_terminal_node "OPENPIFPAF_WRAPPER" 'rostopic echo /sara_command & rostopic echo /sara_said'  "$PIDFILENAMEPERSISTENT"
+    start_terminal_node "SARA_SAID_AND_EARD" 'rostopic echo /sara_command & rostopic echo /sara_said'  "$PIDFILENAMEPERSISTENT"
 
 
 
