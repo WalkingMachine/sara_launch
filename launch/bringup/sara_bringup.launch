@@ -1,38 +1,36 @@
 <launch>
+    <arg name="simulation" default="false" />
+    <arg name="teleop" default="true" />
+    <arg name="autonaumous_mode" default="true" />
+    <arg name="rviz" default="true" />
+
+    <arg name="navigation" default="true" />
+    <arg name="mapping" default="false" />
+    <arg if="$(arg simulation)" name="map" default="$(find sara_navigation)/maps/map_simulation.yaml" />
+    <arg unless="$(arg simulation)" name="map" default="$(find sara_navigation)/maps/D_third_floor_ets.yaml" />
 
 
-    <!-- start robot description -->
-        <include file="$(find sara_description)/launch/sara_description.launch"/>
-    
-    <!-- start arduino nodes -->
-        <include file="$(find sara_udev)/launch/launch_arduinos.launch"/>
+    <!-- start the robot itself -->
+        <!-- Depending on whether we use simulation or the real Sara, we launch the relevent file. -->
+        <include  unless="$(arg simulation)" file="$(find sara_launch)/launch/bringup/low_level_systems/real_robot/sara_hardware.launch"/>
+        <include  if="$(arg simulation)" file="$(find sara_launch)/launch/bringup/low_level_systems/simulation/sara_simulation.launch"/>
 
-    <!-- start ros control related nodes -->
-        <include file="$(find sara_control)/launch/sara_hardware.launch"/>
-        <include file="$(find sara_launch)/launch/control/sara_controllers.launch"/>
+    <!-- start the high level systems -->
+        <include file="$(find sara_launch)/launch/bringup/high_level_systems/sara_high_level.launch">
+            <arg name="teleop" default="$(arg teleop)" />
+            <arg name="mapping" default="$(arg mapping)" />
+            <arg name="navigation" default="$(arg navigation)" />
+            <arg name="map" default="$(arg map)" />
+        </include>
 
-    <!--    start the hardwares nodes   -->
-        <include file="$(find robotiq_85_driver)/launch/robotiq_85_driver.launch"/>
-        <include file="$(find wm_dynamixel_node)/launch/wm_dynamixel_node.launch"/>
-        <include file="$(find roboteq_driver)/launch/driveUltime.launch"/>
-        <include file="$(find wm_mecanum_cmd)/launch/wm_mecanum_auto.launch"/>
-        <include file="$(find wm_odometry_feedback)/launch/wm_odometry_feedback.launch"/>
+    <!-- start the autonaumy systems -->
+        <!-- start the autonaumy systems -->
+        <include  if="$(arg autonaumous_mode)" file="$(find sara_launch)/launch/bringup/autonomy_systems/sara_autonomy.launch">
+        </include>
 
-    <!-- start trajectory manager -->
-        <include file="$(find wm_trajectory_manager)/launch/trajectory_manager.launch"/>
 
-    <!-- start pose publication -->
-        <include file="$(find sara_launch)/launch/robot_pose_publisher/robot_pose_publisher.launch"/>
+    <!-- start rviz -->
+        <node if="$(arg rviz)" name="rviz" pkg="rviz" type="rviz" respawn="false" output="screen"/>
 
-    <!-- start scans -->
-        <include file="$(find sara_launch)/launch/urg_node/wm_urg_node.launch"/>
-
-    <!-- start leg detector and peoplefollower node -->
-        <include file="$(find sara_launch)/launch/people_launch/wm_leg_detector.launch"/>
-
-    <!-- start the face node -->
-        <include file="$(find sara_launch)/launch/face/sara_face.launch" />
-    
 
 </launch>
-

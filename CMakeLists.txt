@@ -1,6 +1,13 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(sara_launch)
 
+
+# Installation
+execute_process (
+    COMMAND bash -c "cd ../src/sara_launch/ ; ./install.sh"
+)
+
+
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages

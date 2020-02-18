@@ -1,0 +1,8 @@
+<launch>
+
+    <!-- start robot description -->
+        <include file="$(find sara_description)/launch/sara_description.launch">
+            <arg name="sim" value="true"/>
+        </include>
+
+</launch>

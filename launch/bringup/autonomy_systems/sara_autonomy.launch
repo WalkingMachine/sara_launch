@@ -1,0 +1,27 @@
+<launch>
+
+    <!-- start leg detector and peoplefollower node -->
+        <include file="$(find sara_launch)/launch/people_launch/wm_leg_detector.launch"/>
+
+    <!-- start flexbe -->
+        <include file="$(find flexbe_app)/launch/flexbe_full.launch" />
+
+    <!-- start speech recognition node
+        <include file="$(find wm_snips_asr)/launch/wm_snips_asr.launch" />  -->
+
+    <!-- start face recognition node
+        <include file="$(find ros_face_recognition)/launch/ros-face-recognition.launch" /> -->
+
+    <!-- start entity tracking node -->
+        <include file="$(find wm_entity_tracker)/launch/wm_entity_tracker.launch" />
+
+    <!-- start object segmentation node
+        <include file="$(find wm_object_segmentation)/launch/wm_object_segmentation.launch" /> -->
+
+    <!-- start gpd node
+        <include file="$(find gpd)/launch/tutorial2.launch" /> -->
+
+    <!-- start openpifpaf ros node
+        <include file="$(find wm_openpifpaf_ros_wrapper)/launch/ros_wrapper.launch" /> -->
+
+</launch>

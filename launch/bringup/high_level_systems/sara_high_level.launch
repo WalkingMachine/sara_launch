@@ -1,0 +1,39 @@
+<launch>
+  <arg name="teleop" default="true" />
+  <arg name="navigation" default="true" />
+  <arg name="mapping" default="false" />
+  <arg name="map" default="$(find sara_navigation)/maps/map_simulation.yaml" />
+
+  <!-- start trajectory manager -->
+      <include file="$(find wm_trajectory_manager)/launch/trajectory_manager.launch"/>
+
+  <!-- start pose publication -->
+      <include file="$(find sara_launch)/launch/robot_pose_publisher/robot_pose_publisher.launch"/>
+
+    <!-- start the face node -->
+        <include file="$(find sara_launch)/launch/face/sara_face.launch" />
+
+    <!-- start text to speech node -->
+        <include file="$(find wm_tts)/launch/wm_tts.launch" />
+
+    <!-- start wm_direction_to_point node -->
+        <include file="$(find wm_direction_to_point)/launch/direction_to_point.launch" />
+
+    <!-- start moveit node -->
+        <include file="$(find sara_moveit)/launch/move_group.launch" />
+
+    <!-- start navigation or mapping node -->
+    <group if="$(arg navigation)">
+        <include unless="$(arg mapping)" file="$(find sara_navigation)/launch/move_base_amcl.launch">
+            <arg name="map" value="$(arg map)" />
+        </include>
+        <include if="$(arg mapping)" file="$(find sara_navigation)/launch/gmaping_demo.launch">
+            <arg name="map" value="$(arg map)" />
+        </include>
+    </group>
+
+    <!-- start teleop node -->
+        <include if="$(arg teleop)" file="$(find sara_teleop)/launch/sara_teleop.launch" />
+
+
+</launch>

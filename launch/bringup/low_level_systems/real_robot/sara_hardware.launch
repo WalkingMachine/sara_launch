@@ -1,0 +1,8 @@
+<launch>
+
+    <!-- start the main computer systems -->
+        <include file="$(find sara_launch)/launch/bringup/low_level_systems/real_robot/sara_main_computer.launch"/>
+    <!-- start the jetson systems
+        <include file="$(find sara_launch)/launch/bringup/low_level_systems/real_robot/sara_jetson.launch"/> -->
+
+</launch>
