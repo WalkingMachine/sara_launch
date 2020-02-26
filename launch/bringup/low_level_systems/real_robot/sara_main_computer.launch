@@ -19,11 +19,5 @@
     <!-- start scans -->
         <include file="$(find sara_launch)/launch/urg_node/wm_urg_node.launch"/>
 
-    <!-- start the face node -->
-        <include file="$(find sara_launch)/launch/face/sara_face.launch" />
-
-    <!-- start pose publication -->
-        <include file="$(find sara_launch)/launch/robot_pose_publisher/robot_pose_publisher.launch"/>
-
 
 </launch>
