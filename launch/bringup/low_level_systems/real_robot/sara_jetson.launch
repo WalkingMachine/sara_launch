@@ -1,17 +1,19 @@
 <launch>
+  <!-- set arguments -->
+    <arg name="camera" default="head_xtion" />
+    <arg name="darknet_name" default="darknet_ros_jetson" />
 
-    <!-- set arguments -->
-        <arg name="camera" default="head_xtion" />
-        <arg name="darknet_name" default="darknet_ros_jetson" />
+    <group>
+      <machine name="jetson" address="sara-jetson1" env-loader="~/env.sh" user="nvidia" default="true"/>
 
     <!-- start all cameras -->
         <include file="$(find sara_launch)/launch/openni2/wm_openni2.launch" >
             <arg name="camera" value="$(arg camera)" />
         </include>
 
-    <!-- start darknet -->
+    <!-- start darknet
         <include file="$(find darknet_ros)/launch/darknet_ros.launch" >
             <arg name="node_name" value="$(arg darknet_name)"/>
-        </include>
-
+        </include>-->
+    </group>
 </launch>
