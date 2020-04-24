@@ -2,6 +2,7 @@
     <arg name="simulation" default="false" />
     <arg name="teleop" default="true" />
     <arg name="autonaumous_mode" default="true" />
+    <arg name="mimetism_mode" default="false" />
     <arg name="rviz" default="true" />
 
     <arg name="navigation" default="true" />
@@ -28,6 +29,9 @@
         <include  if="$(arg autonaumous_mode)" file="$(find sara_launch)/launch/bringup/autonomy_systems/sara_autonomy.launch">
         </include>
 
+    <!-- start the mimetism system -->
+        <include  if="$(arg mimetism_mode)" file="$(find sara_launch)/launch/bringup/mimetism/sara_mimetism.launch">
+        </include>
 
     <!-- start rviz -->
         <node if="$(arg rviz)" name="rviz" pkg="rviz" type="rviz" respawn="false" output="screen"/>
