@@ -10,12 +10,12 @@
     <arg unless="$(arg simulation)" name="map" default="$(find sara_navigation)/maps/D_third_floor_ets.yaml" />
 
 
-    <!-- start the robot itself -->
-        <!-- Depending on whether we use simulation or the real Sara, we launch the relevent file. -->
+    <!-- Start the robot itself -->
+        <!-- Depending on whether we use the simulation or the real SARA, we launch the relevant file. -->
         <include  unless="$(arg simulation)" file="$(find sara_launch)/launch/bringup/low_level_systems/real_robot/sara_hardware.launch"/>
         <include  if="$(arg simulation)" file="$(find sara_launch)/launch/bringup/low_level_systems/simulation/sara_simulation.launch"/>
 
-    <!-- start the high level systems -->
+    <!-- Start the high-level systems -->
         <include file="$(find sara_launch)/launch/bringup/high_level_systems/sara_high_level.launch">
             <arg name="teleop" default="$(arg teleop)" />
             <arg name="mapping" default="$(arg mapping)" />
@@ -23,8 +23,7 @@
             <arg name="map" default="$(arg map)" />
         </include>
 
-    <!-- start the autonaumy systems -->
-        <!-- start the autonaumy systems -->
+    <!-- Start the autonomy systems -->
         <include  if="$(arg autonaumous_mode)" file="$(find sara_launch)/launch/bringup/autonomy_systems/sara_autonomy.launch">
         </include>
 
