@@ -27,9 +27,7 @@
         <include unless="$(arg mapping)" file="$(find sara_navigation)/launch/move_base_amcl.launch">
             <arg name="map" value="$(arg map)" />
         </include>
-        <include if="$(arg mapping)" file="$(find sara_navigation)/launch/gmaping_demo.launch">
-            <arg name="map" value="$(arg map)" />
-        </include>
+        <include if="$(arg mapping)" file="$(find sara_navigation)/launch/gmapping_demo.launch"/>
     </group>
 
     <!-- start teleop node -->
