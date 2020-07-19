@@ -4,7 +4,7 @@
     <arg name="darknet_name" default="darknet_ros_jetson" />
 
     <group>
-      <machine name="jetson" address="sara-jetson1" env-loader="~/env.sh" user="nvidia" default="true"/>
+      <machine name="jetson" address="sara-jetson1" env-loader="~/env.sh" user="nvidia" default="never"/>
 
     <!-- start all cameras -->
         <include file="$(find sara_launch)/launch/openni2/wm_openni2.launch" >
