@@ -279,7 +279,7 @@ emotion: 0" --once
         then
             COMMAND='while [ ! $(ssh -t -t nvidia@sara-jetson1 "echo ok" ) ] ; do echo $(tput setaf 3)Still waiting for jetson$(tput setaf 7) ; sleep 1; done'
             COMMAND+="; ssh -t -t nvidia@sara-jetson1 'sudo service ntp stop; sudo ntpd -gq'"
-            COMMAND+="; ssh -t -t nvidia@sara-jetson1 'cd /home/nvidia ; roslaunch sara_launch jetson.launch'"
+            COMMAND+="; ssh -t -t nvidia@sara-jetson1 'cd /home/nvidia ; roslaunch sara_launch sara_jetson.launch'"
             start_terminal_node "JETSON" "$COMMAND"  "$PIDFILENAMEESTOP"
         fi
 
